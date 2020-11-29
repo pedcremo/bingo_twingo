@@ -2,9 +2,9 @@
 import './css/style.css';
 import './css/ingame.css';
 import { docReady, showModal, clearModal, debug } from './js/core/core.js';
-import './js/card.js';
+//import './js/card.js';
 import { Bombo } from '../common/bombo.js';
-import { BingoCard } from './js/card.js';
+import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
 import { modalPlayers, setupAudioBingoWin } from './templates/modalPlayers.js';
 import { modalLiniaBingo } from './templates/modalLiniaBingo.js';

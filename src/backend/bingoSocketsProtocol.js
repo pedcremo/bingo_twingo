@@ -1,6 +1,8 @@
 import { gameController } from './gameController'
 import { PubSub } from '../common/pubSub.js';
-import BingoCard from '../common/bingoCard'
+//import BingoCard from '../common/bingoCard'
+import { BingoCard } from '../common/bingoCard.js';
+
 
 let linkHttpSocketServerToApp = (app) =>{
     const http = require('http').createServer(app)

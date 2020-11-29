@@ -1,9 +1,9 @@
-import { debug, clearModal, showModal } from '../js/core/core';
-import '../css/ingame.css';
+import { debug, clearModal, showModal } from '..//core';
+import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';
 
-let settings = require('../../settings')
+let settings = require('../../../settings')
 
 //Render bingo bombo
 let renderBalls = () => {

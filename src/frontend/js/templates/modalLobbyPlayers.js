@@ -1,5 +1,5 @@
-import { debug, clearModal, showModal } from '../js/core/core';
-import '../css/modalLobbyPlayers.css';
+import { debug, clearModal, showModal } from '../core';
+import '../../css/modalLobbyPlayers.css';
 //import * as utils from '../js/utils.js'
 import { inGameLayout } from './inGameLayout';
 

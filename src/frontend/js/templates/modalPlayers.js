@@ -1,11 +1,11 @@
-import video from '../assets/videos/los_bingueros.mp4';
-import audio from '../assets/audios/Bingo Sound Effect.mp3';
-import { app } from '../index.js';
-import { debug, clearModal, showModal } from '../js/core/core';
-import '../css/modalPlayers.css';
-import * as utils from '../js/utils.js'
+import video from '../../assets/videos/los_bingueros.mp4';
+import audio from '../../assets/audios/Bingo Sound Effect.mp3';
+import { app } from '../../index.js';
+import { debug, clearModal, showModal } from '../core';
+import '../../css/modalPlayers.css';
+import * as utils from '../utils.js'
 //import * as settings from '../../utils/settings.json'
-let settings = require('../../settings')
+let settings = require('../../../settings')
 import { modalMainMenu } from './modalMainMenu';
 
 /**

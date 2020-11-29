@@ -1,7 +1,7 @@
-import { debug, clearModal, showModal } from '../js/core/core';
-import { app } from '../index.js';
-import '../css/modalMainMenu.css';
-import * as utils from '../js/utils.js'
+import { debug, clearModal, showModal } from '../core';
+import { app } from '../../index.js';
+import '../../css/modalMainMenu.css';
+import * as utils from '..//utils.js'
 import { modalLobbyPlayers } from './modalLobbyPlayers.js';
 import io from 'socket.io-client'
 import { modalPlayers } from './modalPlayers';

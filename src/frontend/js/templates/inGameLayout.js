@@ -1,4 +1,4 @@
-import { debug, clearModal, showModal } from '..//core';
+import { debug, clearModal, showModal } from '../core';
 import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';

@@ -3,7 +3,7 @@ import './css/style.css';
 import './css/ingame.css';
 import { docReady, showModal, clearModal, debug } from './js/core/core.js';
 import './js/card.js';
-import { Bombo } from './js/bombo.js';
+import { Bombo } from '../common/bombo.js';
 import { BingoCard } from './js/card.js';
 import { PubSub } from '../common/pubSub.js';
 import { modalPlayers, setupAudioBingoWin } from './templates/modalPlayers.js';
@@ -37,7 +37,7 @@ const app = (() => {
         if (num) {
             pubSub.publish("New Number", bombo.getExtractedNumbers());
 
-        /* otherwise means bombo is running out of ball and we should finish the game */    
+        /* otherwise means bombo is running out of balls and we should finish the game */    
         } else {
             stop();
         }

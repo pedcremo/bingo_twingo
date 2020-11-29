@@ -1,10 +1,11 @@
-let  Bombo = require('../common/bombo.js');
+import { Bombo } from '../common/bombo.js';
 let  bingoCard = require('../common/bingoCard.js');
 const PubSub = require('../common/pubSub.js');
 let settings = require('../settings.js')
 // import { settings } from "../utils/settings.js";
 
-const gameController = () => {   
+//CLOSURE
+const gameController = (() => {   
     let currentGame=new Map();    
     const secsUntilBegin = settings.secsUntilBegin;
     const maxUsers = settings.maxUsers;
@@ -118,6 +119,7 @@ const gameController = () => {
     
     return {getCurrentGame: getCurrentGame,
             getGameById: getGameById}
-};
+})();
 
-module.exports = gameController();
+export {gameController};
+//module.exports = gameController();

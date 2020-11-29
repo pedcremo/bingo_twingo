@@ -37,8 +37,7 @@ export class Bombo{
             return (boles.length>0 && boles.splice(0,1))?bolesExtracted[bolesExtracted.length-1]:false;            
         }
         //el render solo lo realiza una vez (añadiendo id a cada bola)
-        let render = () => {
-            // rootElement.innerHTML = `<button id="stop_game">STOP</button>`
+        let render = () => {            
             rootElement.innerHTML += `${boles.map(ball => `<div class='bingoBallEmpty' id='${ball}'>${ball}</div>`).join("")}`;
         }
         render()

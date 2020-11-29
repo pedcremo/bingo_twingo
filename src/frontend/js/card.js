@@ -62,6 +62,7 @@ export class BingoCard{
                          ).join("")+
                     `</table>`;
                     divRoot.innerHTML = out;
+                    //Every time we render the bingo card we should checkBingoOrLine
                     checkBingo(cardMatrix,extractedBalls,pubSub,player); 
           }
           if (pubSub) pubSub.subscribe("New Number",render);

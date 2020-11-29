@@ -1,6 +1,6 @@
 import path from 'path'
 import express from 'express'
-import {linkHttpSocketServerToApp} from './bingoSockets'
+import {linkHttpSocketServerToApp} from './bingoSocketsProtocol'
 
 const app = express(),
             DIST_DIR = __dirname,

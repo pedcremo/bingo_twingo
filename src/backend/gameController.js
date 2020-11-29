@@ -1,6 +1,6 @@
-let  Bombo = require('./bombo.js');
-let  bingoCard = require('./bingoCard.js');
-const PubSub = require('./pubSub.js');
+let  Bombo = require('../common/bombo.js');
+let  bingoCard = require('../common/bingoCard.js');
+const PubSub = require('../common/pubSub.js');
 let settings = require('../settings.js')
 // import { settings } from "../utils/settings.js";
 

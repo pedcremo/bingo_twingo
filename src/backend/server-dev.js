@@ -4,7 +4,7 @@ import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 import config from '../../webpack.dev.config.js'
-import {linkHttpSocketServerToApp} from './bingoSockets'
+import {linkHttpSocketServerToApp} from './bingoSocketsProtocol'
 
 const app = express(),
             DIST_DIR = __dirname,

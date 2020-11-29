@@ -5,7 +5,7 @@ import { docReady, showModal, clearModal, debug } from './js/core/core.js';
 import './js/card.js';
 import { Bombo } from './js/bombo.js';
 import { BingoCard } from './js/card.js';
-import { PubSub } from './js/core/pubSub.js';
+import { PubSub } from '../common/pubSub.js';
 import { modalPlayers, setupAudioBingoWin } from './templates/modalPlayers.js';
 import { modalLiniaBingo } from './templates/modalLiniaBingo.js';
 import { modalMainMenu } from './templates/modalMainMenu.js';

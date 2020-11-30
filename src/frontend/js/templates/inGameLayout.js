@@ -100,12 +100,10 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             card.cardMatrix.forEach((row) => {
                 let linia = row.filter((val) => { if (!extractedBalls.includes(val) && val != null) return val }).length;
                 if (linia > 0) bingo = false;
-                else {
-                  if (line_status == false) {
+                else if(line_status == false){
                      line_status = true;
                      //Inform server we have linia   
                      socket.emit('linia', { playId: card.gameID, card: card })
-                  }
                }
             })
         
@@ -123,12 +121,11 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         
         //Server broadcast all gamers game is over
         socket.on('end_game', function (msg) {
-            console.log(msg);
+            console.log(msg); //Console.log innecesario?
         });
         //Server broadcast all gamers bingo claim has been accepted
         socket.on('bingo_accepted', function (msg) {
-            let username = msg.card.username;
-            showModal(modalLiniaBingo(username, "bingo"),function() {
+            showModal(modalLiniaBingo(msg.card.username, "bingo"),function() {
                 showModal(modalMainMenu());
             },false)
             socket.disconnect();
@@ -136,8 +133,7 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         });
         //Server broadcast all gamers linia claim has been accepted
         socket.on('linia_accepted', function (msg) {            
-            let username = msg.card.username;
-            showModal(modalLiniaBingo(username, "linea"),null,false)
+            showModal(modalLiniaBingo(msg.card.username, "linea"),null,false)
             //In the time set for the variable (by default 3 seconds) the modal is destroyed.
             setTimeout(() => {
                 clearModal('modal')

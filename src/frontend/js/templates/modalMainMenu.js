@@ -11,6 +11,7 @@ export const modalMainMenu = () => {
     const controllers = () => {
         //setup the video
         clearModal('bg')
+        clearModal('gameLayout'); //remove gamelayout if exist
         utils.setupBackgroundVideo();
         let siteIP = location.host;//returns the hostname and port of a URL. DOM api
         

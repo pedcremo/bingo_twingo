@@ -8,18 +8,17 @@ export const modalPlayers =()=>{
             playersNames.forEach((name,index) => {
                 let li=document.createElement('li');
                 li.innerHTML = `<span class='players'>${index+1}</span><p>${name}</p>`;
-                li.addEventListener('click',(event) => {//Click en borrar jugador
 
-                    // let nameToDelete=li.childNodes[1].textContent;
-                    // deleteName(playersNames,nameToDelete);
+                li.onclick=()=>{//Click en borrar jugador
                     li.remove();
                     playersNames=playersNames.filter((item) => item!=name);
                     localStorage.setItem('playersNames',JSON.stringify(playersNames));
-                 
-                })
+                }
                 uList.appendChild(li);
             });//Fin for each
-            addButton.addEventListener("click",(event)=>{    //Add Player 
+
+
+            addButton.onclick=()=>{
                 var regEx= /[aA1-zZ9]/;
                 let name=document.getElementById("fname").value;
                 if(regEx.test(name)){
@@ -32,32 +31,27 @@ export const modalPlayers =()=>{
                         localStorage.setItem('playersNames',JSON.stringify(playersNames));
                     }
                     document.getElementById("fname").value="";
-                    li.addEventListener('click',(event)=> {//Click en borrar jugador despues de añadirlo sin recargar
-                       
+
+                    li.onclick=()=>{//Click en borrar jugador despues de añadirlo sin recargar
                         li.remove();
                         playersNames=playersNames.filter((item) => item!=name);
                         localStorage.setItem('playersNames',JSON.stringify(playersNames));
                         document.getElementById("fname").value="";
-                    });
+                    }
                 }else{
                     alert("Nombre no permitido");
 
                 }
-            
-
-
-
-            })
+            }
         }//Fin id addButton
    
 
 
         let unmuteBtn=document.getElementById('unmuteBtn');
-        unmuteBtn.addEventListener('click', function() {
-            console.log("galdll");
+        unmuteBtn.onclick=()=>{
             let video=document.getElementById('videoBackground');
             video.muted = false;
-        });
+        }
 
     }
     

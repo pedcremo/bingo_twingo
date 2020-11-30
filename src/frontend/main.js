@@ -34,13 +34,8 @@ const app = (() => {
         let num = bombo.pickNumber();
 
         /* If num is a real number we inform all subscribers we have just picked a ball */
-        if (num) {
-            pubSub.publish("New Number", bombo.getExtractedNumbers());
-
+        (num)?pubSub.publish("New Number", bombo.getExtractedNumbers()):stop();
         /* otherwise means bombo is running out of balls and we should finish the game */    
-        } else {
-            stop();
-        }
     };
 
     /* Stop bingo play an clear timer */
@@ -153,7 +148,7 @@ const app = (() => {
         /* Start throwing first ball from bombo. Here we go */
         getBallFromBombo();
         /* Timer in charge to pace time between balls extraction from bombo */
-        debugger
+        // debugger
         myApp = setInterval(getBallFromBombo, app.speed);
     }
 

@@ -135,6 +135,7 @@ const app = (() => {
                 // clearModal("bingoCard") BUG
                 showModal(modalLiniaBingo(player, "bingo"), function () {
                     document.getElementById('sound').remove();//remove div audio sound
+                    document.getElementById('pauseOfflineBtn').remove()//remove Pause/playButton when the match is finished
                     showModal(modalMainMenu());
                 })
             }, 50);

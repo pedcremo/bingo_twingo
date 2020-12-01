@@ -9,39 +9,40 @@ import { modalPlayers } from './modalPlayers';
 export const modalMainMenu = () => {
 
     const controllers = () => {
-        //setup the video
-        clearModal('bg')
+
         utils.setupBackgroundVideo();
         let siteIP = location.host;//returns the hostname and port of a URL. DOM api
-        
-        if (localStorage.getItem('onlineUsername') != '' || localStorage.getItem('onlineUsername') != undefined){
+
+        if (localStorage.getItem('onlineUsername') != '' || localStorage.getItem('onlineUsername') != undefined) {
             document.getElementById('usernameP').value = localStorage.getItem('onlineUsername');
         }
-       
+
         document.getElementById('playOnline').onclick = function () {
-            if(utils.checkName(document.getElementById('usernameP').value)){
-                localStorage.setItem('onlineUsername',document.getElementById('usernameP').value)
-                const socket = io('ws://'+siteIP, {transports: ['websocket']});
+            if (utils.checkName(document.getElementById('usernameP').value)) {
+                localStorage.setItem('onlineUsername', document.getElementById('usernameP').value)
+                const socket = io('ws://' + siteIP, { transports: ['websocket'] });
                 socket.on('connect', () => {
-                    socket.emit('join', document.getElementById('usernameP').value);                
+                    socket.emit('join', document.getElementById('usernameP').value);
                 });
-    
+
                 /* Event triggered once a user joins an 
                 * online game and get a ramdom card with unique id that 
                 * should not be shared
                 */
-                socket.on('joined_game', function (msg) {           
+                socket.on('joined_game', function (msg) {
                     let card = JSON.parse(msg)
                     //Online game            
-                    showModal(modalLobbyPlayers(socket,card))
-                }); 
-            }else{
+                    showModal(modalLobbyPlayers(socket, card))
+                });
+            } else {
                 document.getElementById('msg--err').innerHTML = "\u26A0  Name not allowed!"
             }
         }
 
         // Offline Game
         document.getElementById('playOffline').onclick = function () {
+            //setup the video
+            clearModal('bg');
             showModal(modalPlayers(), app.start)
         }
     }

@@ -22,6 +22,37 @@ Go to dist/ folder and serve your web app:
 `node server.js`
 `Open browser in http://YOUR_IP:8080`
 
+# Docker inplementation
+
+If you want to deploid the app with docker , you must install before docker and docker-compose.
+
+ For install docker : 
+
+ * ` sudo apt update `
+ * ` sudo apt install apt-transport-https ca-certificates curl software-properties-common ` 
+ * ` curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - `
+ * ` sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"  ` 
+ * ` sudo apt update `
+ * ` apt-cache policy docker-ce `
+
+ For install Docker-compose : 
+
+   * Run this command to download the current stable release of Docker Compose:
+    
+    ` sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose `
+
+   * Apply executable permissions to the binary:
+
+      ` sudo chmod +x /usr/local/bin/docker-compose `
+
+   * Test the installation.
+
+      `  docker-compose --version ` 
+
+Once you have installed docker and docker-compose , just you have to write this command at the terminal : 
+
+   * `sudo docker-compose up`
+
 
 # Project technology background 
 

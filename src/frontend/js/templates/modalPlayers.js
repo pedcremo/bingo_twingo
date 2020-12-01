@@ -190,6 +190,7 @@ export const modalPlayers = () => {
         //rback button
         let back = document.getElementById('back_button');
         back.onclick = () =>{
+            div_bg.remove();
             showModal(modalMainMenu());
         }
     }

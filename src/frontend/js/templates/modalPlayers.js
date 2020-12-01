@@ -4,8 +4,7 @@ import { app } from '../../main.js';
 import { debug, clearModal, showModal } from '../core';
 import '../../css/modalPlayers.css';
 import * as utils from '../utils.js'
-//import * as settings from '../../utils/settings.json'
-let settings = require('../../../settings')
+import { settings } from '../../../settings';
 import { modalMainMenu } from './modalMainMenu';
 
 /**

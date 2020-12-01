@@ -2,15 +2,13 @@
 import './css/style.css';
 import './css/ingame.css';
 import { docReady, showModal, clearModal, debug } from './js/core.js';
-//import './js/card.js';
 import { Bombo } from '../common/bombo.js';
 import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
 import { modalPlayers, setupAudioBingoWin } from './js/templates/modalPlayers.js';
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
-// import  * as settings  from '../utils/settings';
-let settings = require('../settings')
+import { settings } from '../settings';
 
 /**
  * Within the app constant(closure), we have defined several variables with anonymous functions which are responsible for starting and stopping the game
@@ -19,8 +17,7 @@ let settings = require('../settings')
  * when one player sings bingo the game stops and in addition to showing a modal with a gif, an audio jumps with a voice that sings BIINGO.
  */
 
-const app = (() => {
-    console.log(settings.ballspeed);
+const app = (() => {      
     let myApp;
     const speed = settings.ballspeed; //in miliseconds
     let bombo;
@@ -171,6 +168,5 @@ const app = (() => {
 /* Real entry point to our bingo app. Show modals to choose players and
  when closed start bingo playing (callback) */
  docReady(() => showModal(modalMainMenu()));
-
 
 export { app };

@@ -1,7 +1,8 @@
 const settings = {
-    ballspeed : 0.3,
-    secsUntilBegin :15,
-    maxUsers :10,
-    secsLineaWait: 3.5
+    ballspeed : 1, //Online and offline applied 
+    secsUntilBegin :15, //Online applied
+    maxUsers :10, //Online applied
+    secsLineaWait: 5 //Online applied
 }
-module.exports = settings;
+
+export {settings};

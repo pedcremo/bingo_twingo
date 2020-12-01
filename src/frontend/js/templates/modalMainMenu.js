@@ -42,7 +42,9 @@ export const modalMainMenu = () => {
 
         // Offline Game
         document.getElementById('playOffline').onclick = function () {
-            showModal(modalPlayers(), app.start)
+            //Delete modal bg because it doubles
+            clearModal('bg')
+            showModal(modalPlayers(), app.start,true)
         }
     }
 

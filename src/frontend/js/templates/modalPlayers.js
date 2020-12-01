@@ -139,7 +139,6 @@ export const modalPlayers = () => {
             if (event.target.value > 5) event.target.value = 5;
         });
        
-     
         let remove_video = document.getElementById('remove_video');
         let div_bg = document.getElementById('div_bg');
 
@@ -175,8 +174,8 @@ export const modalPlayers = () => {
         /**
          * Remove / show video background
          */
-        
-        remove_video.onclick = function () {
+        //Now it detects the click because it is not duplicated
+        remove_video.onclick = function() {
             if (this.classList.contains('off--red')) {
                 this.className = "fas fa-video-slash btn--removebg"
                 videoEl.style.display = "block";
@@ -185,7 +184,6 @@ export const modalPlayers = () => {
                 videoEl.style.display = "none";
             }
         }
-
 
         /**
         * Export Players in csv.

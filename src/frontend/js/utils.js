@@ -24,7 +24,6 @@ export function setupAudioBingoWin() {
  * Set the backgroundVideo 
  */
 export function setupBackgroundVideo() {
-    console.log("Utils video")
     let backgroundVideo = `
         <div id="div_bg" class="bg">
             <video autoplay muted loop id="videoBackground">

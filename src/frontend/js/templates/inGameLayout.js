@@ -2,13 +2,9 @@ import { debug, clearModal, showModal } from '../core';
 import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';
-import {
-    renderBalls , renderCard
-} from '../utils'
+import * as utils from '..//utils.js'
 
 let settings = require('../../../settings')
-
-
 export const inGameLayout = (socketIO, card,otherPlayers) => {
 
     const controllers = () => {       
@@ -27,7 +23,7 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         divRoot.setAttribute("id",card.username);
         document.getElementById('bingoCards').appendChild(divRoot);
         //Render player card
-        renderCard(extractedBalls,card.cardMatrix,card.username);
+        utils.renderCard(extractedBalls,card.cardMatrix,card.username);
         
         //Render other players cards in order to have a visual reference
         otherPlayers.forEach((otherPlayer) => {
@@ -35,11 +31,11 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             divRoot.classList.add('bingoCardLayoutOther');
             divRoot.setAttribute("id",otherPlayer.username);
             document.getElementById('bingoCards').appendChild(divRoot);
-            renderCard(extractedBalls,otherPlayer.card,otherPlayer.username)
+           utils.renderCard(extractedBalls,otherPlayer.card,otherPlayer.username)
         });
 
         //Render bombo
-        renderBalls();
+        utils.renderBalls();
 
         //Every time server picks upn a ball from bombo this event is broadcasted to all online players
         //joined on same game (room)
@@ -47,11 +43,11 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             //Add new ball to array with already extracted balls     
             extractedBalls.push(msg.num)
             //Render player card to reflect any change maybe msg.num is in the card and we need to mark it
-            renderCard(extractedBalls,card.cardMatrix,card.username);
+           utils.renderCard(extractedBalls,card.cardMatrix,card.username);
             
             //Render others players cards too 
             otherPlayers.forEach((otherPlayer) =>
-                renderCard(extractedBalls,otherPlayer.card,otherPlayer.username)
+               utils.renderCard(extractedBalls,otherPlayer.card,otherPlayer.username)
             );
             //Check if player card is in 'linia' or bingo state
             checkBingo(card,extractedBalls,line_status);   
@@ -80,14 +76,7 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             })
         
             if (bingo && bingo_status == false) {
-            
-               let send = {
-                    game_id: card.gameID,
-                    nickname: card.username,
-                    card: card,
-               }
-               //Inform server we have bingo
-               socket.emit('bingo', { playId: card.gameID, card: card })
+               socket.emit('bingo', { playId: card.gameID, card: card })//Inform server we have bingo
             }
          }
         

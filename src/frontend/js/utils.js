@@ -91,7 +91,7 @@ export let checkName = (name) => {
 
 
 /**
- * RENDERS
+ * RENDERS BINGO BOMBO AND BINGO CARD
  */
 //Render bingo bombo
 export let renderBalls = () => {

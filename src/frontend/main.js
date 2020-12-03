@@ -2,14 +2,12 @@
 import './css/style.css';
 import './css/ingame.css';
 import { docReady, showModal, clearModal, debug } from './js/core.js';
-//import './js/card.js';
 import { Bombo } from '../common/bombo.js';
 import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
-import { modalPlayers, setupAudioBingoWin } from './js/templates/modalPlayers.js';
+import * as utils from './js/utils'
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
-// import  * as settings  from '../utils/settings';
 let settings = require('../settings')
 
 /**
@@ -126,7 +124,7 @@ const app = (() => {
         pubSub.subscribe("BINGO", (player) => {
             stop();
             /* call audio song to enhance bingo prize experience*/
-            setupAudioBingoWin();
+            utils.setupAudioBingoWin();
             /* Show bingo modal with animation and player awarded */
             setTimeout(function () {
                 /* Delete BINGO event from publish/subscriber mechanism */

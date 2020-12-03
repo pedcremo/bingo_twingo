@@ -1,7 +1,7 @@
 import { debug, clearModal, showModal } from '../core';
 import { app } from '../../main.js';
 import '../../css/modalMainMenu.css';
-import * as utils from '..//utils.js'
+import * as utils from '../utils.js'
 import { modalLobbyPlayers } from './modalLobbyPlayers.js';
 import io from 'socket.io-client'
 import { modalPlayers } from './modalPlayers';
@@ -48,8 +48,7 @@ export const modalMainMenu = () => {
     }
 
     return {
-        template:
-            `
+        template: `
             <div id="mainMenu" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content">
@@ -61,7 +60,6 @@ export const modalMainMenu = () => {
                         <button id='playOffline' class="mainMenu__btn menu__offline_btn">Start Offline Game</button>
                         <button id='playOnline' class="mainMenu__btn menu__online_btn">Search Online Game</button>
                     </div>
-                    
                 </div>
             </div>`,
         controllers: controllers

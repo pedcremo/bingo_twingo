@@ -2,7 +2,6 @@ import { app } from '../../main.js';
 import { debug, clearModal, showModal } from '../core';
 import '../../css/modalPlayers.css';
 import * as utils from '../utils.js'
-//import * as settings from '../../utils/settings.json'
 let settings = require('../../../settings')
 import { modalMainMenu } from './modalMainMenu';
 
@@ -10,7 +9,6 @@ export const modalPlayers = () => {
 
     const controllers = () => {
         let playersNames = JSON.parse(localStorage.getItem('playersNames')) || [];
-        // utils.setupBackgroundVideo();
         clearModal("gameLayout") //clear the game
 
         // Draw the players in localStorage. Each time you add or delete a player, this function is called.

@@ -2,14 +2,12 @@
 import './css/style.css';
 import './css/ingame.css';
 import { docReady, showModal, clearModal, debug } from './js/core.js';
-//import './js/card.js';
 import { Bombo } from '../common/bombo.js';
 import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
-import { modalPlayers, setupAudioBingoWin } from './js/templates/modalPlayers.js';
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
-// import  * as settings  from '../utils/settings';
+import * as utils from './js/utils.js'
 let settings = require('../settings')
 
 /**
@@ -46,7 +44,6 @@ const app = (() => {
     /* Stop bingo play an clear timer */
     let stop = () => {
         stateApp = "stop";
-        debugger
         clearInterval(myApp);
     }
     let resume = () => {
@@ -103,7 +100,6 @@ const app = (() => {
         obviously we stop bingo playing until modal is closed 
         */        
         pubSub.subscribe("LINIA", (player) => {
-            debug("Linia");            
             /* Stop bingo playing */
             stop();
             /* As linia only could be awarded once per playing we delete that event
@@ -112,8 +108,6 @@ const app = (() => {
             /* Show modal */
             setTimeout(function () {
                 showModal(modalLiniaBingo(player, "linea"), function () {
-                    debug("SPEEEED");
-                    debug(speed);
                     myApp = setInterval(getBallFromBombo, app.speed);
                 },false)
             }, 50);
@@ -127,7 +121,7 @@ const app = (() => {
         pubSub.subscribe("BINGO", (player) => {
             stop();
             /* call audio song to enhance bingo prize experience*/
-            setupAudioBingoWin();
+            utils.setupAudioBingoWin();
             /* Show bingo modal with animation and player awarded */
             setTimeout(function () {
                 /* Delete BINGO event from publish/subscriber mechanism */
@@ -153,7 +147,6 @@ const app = (() => {
         /* Start throwing first ball from bombo. Here we go */
         getBallFromBombo();
         /* Timer in charge to pace time between balls extraction from bombo */
-        debugger
         myApp = setInterval(getBallFromBombo, app.speed);
     }
 

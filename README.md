@@ -1,3 +1,17 @@
+# TODO
+-Remove non used imports, lines of code, non updated comments. Simplify chunks of code simplifying and improving code readability  
+- Way we start offline and offline mode or playing are not unified. In offline we have an 'app' closure managing all flow. In online is a bunch of concatenated modals with no real manager.
+- i18n
+- Refactor to support CSS theming structuring better html structure and tidyng up class mess.
+- In online version user should check manually numbers extracted from bombo that matches with their own bingo card. Two modes in settings.js. Automatic, it is how it works now, every ball extracted from bombo matching with one of our card numbers it's highlighted automatically. Manual, if you forget to click on matched number in your bingo card you miss you oportunity to get a line or bingo. Otherwise if you click in a wrong card number and claim a bingo or line server should check validity.
+- One test for every .js file in our src/ with several unit testing assertiions each one using jest. Unit test coverage above 90% of whole code.
+- Continous Integration. A way to deploy in a free hosting service(heroku) an exact mirror of our current branch 'main' code in an open accessible server on Internet
+- package.json should include 'doc' script. It will build programming documentation inside doc/ folder. Not anywhere else. Using jsdoc3 module.
+- Implement a basic routing system with these routes: /, online, offline, contact, signin, singup, logout, about.
+- Once we have online mode it's time to remove offline play mode. Or at least it should be congigurable from settings.js. enableOffline=true/false to let play or not offline
+-Dockerfile
+
+
 # BINGO TWINGO
 Bingo twingo is a web application development project in offline and online mode (using websockets with socket.io) that consists of a traditional online bingo game to play without an internet connection or online with other remote players. Its fast and funny and doesn't require any kind of sign in, sing up, fuck up, cookie hell... and all the annoying things usually around modern web apps.
 

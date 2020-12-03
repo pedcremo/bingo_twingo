@@ -9,8 +9,9 @@ import { modalPlayers } from './modalPlayers';
 export const modalMainMenu = () => {
 
     const controllers = () => {
-        //setup the video
-        clearModal('bg')
+        /**
+         * Start background video
+         */
         utils.setupBackgroundVideo();
         let siteIP = location.host;//returns the hostname and port of a URL. DOM api
         

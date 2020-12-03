@@ -9,6 +9,7 @@ import { modalPlayers, setupAudioBingoWin } from './js/templates/modalPlayers.js
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
 import { settings } from '../settings';
+import * as utils from './js/utils.js'
 
 /**
  * Within the app constant(closure), we have defined several variables with anonymous functions which are responsible for starting and stopping the game
@@ -43,7 +44,6 @@ const app = (() => {
     /* Stop bingo play an clear timer */
     let stop = () => {
         stateApp = "stop";
-        debugger
         clearInterval(myApp);
     }
     let resume = () => {
@@ -51,9 +51,7 @@ const app = (() => {
         myApp = setInterval(getBallFromBombo, app.speed);
     }
     /* Start bingo play */
-    let start = () => {
-        clearModal('bg');
-        
+    let start = () => {        
         /* Basic template where we are going to render bingo play */
         let doc = new DOMParser().parseFromString(`
             <div id="gameLayout" class="gameLayout">
@@ -124,7 +122,7 @@ const app = (() => {
         pubSub.subscribe("BINGO", (player) => {
             stop();
             /* call audio song to enhance bingo prize experience*/
-            setupAudioBingoWin();
+            utils.setupAudioBingoWin();
             /* Show bingo modal with animation and player awarded */
             setTimeout(function () {
                 /* Delete BINGO event from publish/subscriber mechanism */
@@ -151,7 +149,6 @@ const app = (() => {
         /* Start throwing first ball from bombo. Here we go */
         getBallFromBombo();
         /* Timer in charge to pace time between balls extraction from bombo */
-        debugger
         myApp = setInterval(getBallFromBombo, app.speed);
     }
 

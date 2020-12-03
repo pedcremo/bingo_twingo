@@ -47,7 +47,6 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         let extractedBalls = [];
         let lastBall;
         let secsModalLinea = settings.secsLineaWait;
-        clearModal('bg');
         
         //Create a div to contain player online bingo card. Id == username
         let divRoot = document.createElement('div');

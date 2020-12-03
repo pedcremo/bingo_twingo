@@ -7,7 +7,7 @@ import audio from '../assets/audios/Bingo Sound Effect.mp3';
 */
 export function setupAudioBingoWin() {
     let audioBackground = `
-        <div id="sound">
+        <div id="sound" style="width: 0;overflow:hidden">
             <audio controls autoplay loop id="bingoSound">
                   <source src="${audio}" type="audio/mpeg">
              </audio>
@@ -40,7 +40,6 @@ export function setupBackgroundVideo() {
     videoEl = videoEl.body.firstChild;
     document.body.appendChild(videoEl);
     
-
     let remove_video = document.getElementById('remove_video');
 
     //We get the video
@@ -78,6 +77,7 @@ export function setupBackgroundVideo() {
             videoDOM.style.display = "none";
         }
     }
+    setupBackgroundVideo.remove = () => document.getElementById('div_bg').remove();
 }
 //CHECK NAME FUNCTION
 export let checkName = (name) => {

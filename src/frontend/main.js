@@ -20,7 +20,6 @@ let settings = require('../settings')
  */
 
 const app = (() => {
-    console.log(settings.ballspeed);
     let myApp;
     const speed = settings.ballspeed; //in miliseconds
     let bombo;

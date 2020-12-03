@@ -75,25 +75,16 @@ function createBingoProtocol(io){
       
   
       pubSub.unsubscribe('new_number');  
-      console.log("GAME INFO "+JSON.stringify(game)); 
-      //console.log("bomboTimer "+game.bomboTimer);   
-      //clearInterval(game.bomboTimer);
-      console.log("bingo ->"+JSON.stringify(playInfo));
       io.sockets.in(game.id).emit('bingo_accepted',playInfo);
       
       //Stop throwing balls from bombo
       let gId=gameController.getGameById(game.id);
       clearInterval(gId.get('bomboInterval'));
       pubSub.publish("end_game",game.id);
-      io.sockets.in(game.id).emit('end_game',game.id);
-      // io.sockets.in(game.id).clients((error, socketIds) => {
-      //   if (error) throw error;
-      //   socketIds.forEach(socketId => io.sockets.sockets[socketId].leave(game.id));
-      // });
+      io.sockets.in(game.id).emit('end_game',game.id);;
     });
   
     socket.on('linia',playInfo =>{
-      console.log("linia ->"+JSON.stringify(playInfo));
       pubSub.publish("linea_accepted",playInfo);
       io.sockets.in(game.id).emit('linia_accepted',playInfo);
     });

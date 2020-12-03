@@ -54,7 +54,6 @@ export const modalPlayers =()=>{
 
         let unmuteBtn=document.getElementById('unmuteBtn');
         unmuteBtn.addEventListener('click', function() {
-            console.log("galdll");
             let video=document.getElementById('videoBackground');
             video.muted = false;
         });

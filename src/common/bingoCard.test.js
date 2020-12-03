@@ -53,8 +53,6 @@ function testCard(cardMatrix){
           return true;
 
      }catch(e){
-          //console.log(e.name+" "+e.message);
-          //if (e !== BreakException) throw e;
           return false;
      }
 

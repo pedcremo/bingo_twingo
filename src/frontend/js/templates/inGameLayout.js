@@ -2,41 +2,12 @@ import { debug, clearModal, showModal } from '../core';
 import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';
+import {
+    renderBalls , renderCard
+} from '../utils'
 
 let settings = require('../../../settings')
 
-//Render bingo bombo
-let renderBalls = () => {
-    document.getElementById('balls').innerHTML = `${Array.from({length:90},(_,i) => i + 1).map(ball => `<div class='bingoBallEmpty' id='${ball}'>${ball}</div>`).join("")}`;
-}
-
-//Render card 
-let renderCard = (extractedBalls=[],cardMatrix,player) => {
-        
-    let out =`<h1>Player ${player}</h1>
-         <table class='bingoCard'>
-            
-             `+
-              cardMatrix.map((value) => 
-              "<tr>"+value.map((val) =>{
-                   if (val==null){
-                        return "<th class='nulo'></th>"
-                   }else{
-                        if (extractedBalls && extractedBalls.indexOf(val) >= 0){
-                            if (val===extractedBalls[extractedBalls.length-1]){
-                                return "<th class='extracted blink'>"+val+"</th>";                                  
-                            }else{
-                                return "<th class='extracted'>"+val+"</th>";                                  
-                            }
-                        }else{
-                             return "<th>"+val+"</th>"
-                        }
-                   }}).join("")
-              +"</tr>"                          
-              ).join("")+
-         `</table>`;
-    document.getElementById(player).innerHTML = out;
-}
 
 export const inGameLayout = (socketIO, card,otherPlayers) => {
 
@@ -95,7 +66,6 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         
         //Check bingo or linia on a card
         let checkBingo = (card, extractedBalls,line_status) => {
-            console.log(extractedBalls.length);
             let bingo = true;
             card.cardMatrix.forEach((row) => {
                 let linia = row.filter((val) => { if (!extractedBalls.includes(val) && val != null) return val }).length;
@@ -123,7 +93,6 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         
         //Server broadcast all gamers game is over
         socket.on('end_game', function (msg) {
-            console.log(msg);
         });
         //Server broadcast all gamers bingo claim has been accepted
         socket.on('bingo_accepted', function (msg) {

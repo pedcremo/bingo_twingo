@@ -94,7 +94,6 @@ function checkBingo(cardMatrix,extractedBalls,pubSub,player){
 
      if (bingo) {
           pubSub.publish("BINGO",player)
-          //debug("BINGO "+player)
      }
 }
 /**

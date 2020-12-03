@@ -88,3 +88,40 @@ export let checkName = (name) => {
         return false;
     }
 }
+
+
+/**
+ * RENDERS
+ */
+//Render bingo bombo
+export let renderBalls = () => {
+    document.getElementById('balls').innerHTML = `${Array.from({length:90},(_,i) => i + 1).map(ball => `<div class='bingoBallEmpty' id='${ball}'>${ball}</div>`).join("")}`;
+}
+
+//Render card 
+export let renderCard = (extractedBalls=[],cardMatrix,player) => {
+        
+    let out =`<h1>Player ${player}</h1>
+         <table class='bingoCard'>
+            
+             `+
+              cardMatrix.map((value) => 
+              "<tr>"+value.map((val) =>{
+                   if (val==null){
+                        return "<th class='nulo'></th>"
+                   }else{
+                        if (extractedBalls && extractedBalls.indexOf(val) >= 0){
+                            if (val===extractedBalls[extractedBalls.length-1]){
+                                return "<th class='extracted blink'>"+val+"</th>";                                  
+                            }else{
+                                return "<th class='extracted'>"+val+"</th>";                                  
+                            }
+                        }else{
+                             return "<th>"+val+"</th>"
+                        }
+                   }}).join("")
+              +"</tr>"                          
+              ).join("")+
+         `</table>`;
+    document.getElementById(player).innerHTML = out;
+}

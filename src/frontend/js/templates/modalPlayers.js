@@ -168,7 +168,6 @@ export const modalPlayers = () => {
         let unmuteBtn = document.getElementById('unmuteBtn');
         let videoEl = document.getElementById('videoBackground');
         unmuteBtn.onclick = function () {
-            console.log('hace click')
             videoEl.muted = !videoEl.muted;
             this.className = (videoEl.muted == true) ? "fas fa-volume-mute btn--mute off--red" : "fas fa-volume-off btn--mute"
         }

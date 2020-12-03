@@ -24,5 +24,3 @@ export class PubSub {
     this.handlers = filtered;
   }
 }
-
-//module.exports = PubSub;

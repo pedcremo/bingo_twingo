@@ -1,10 +1,5 @@
 import { Bombo } from '../common/bombo.js';
-//let  bingoCard = require('../common/bingoCard.js');
-import { bingoCard } from '../common/bingoCard.js';
-import { PubSub } from '../common/pubSub.js';
-//const PubSub = require('../common/pubSub.js');
 let settings = require('../settings.js')
-// import { settings } from "../utils/settings.js";
 
 //CLOSURE
 const gameController = (() => {   
@@ -62,17 +57,13 @@ const gameController = (() => {
                     }
                     if (!realGame.get('bomboInterval')) {
                         realGame.set('bomboInterval',bomboInterval)
-                        console.log(realGame.get('bomboInterval'));
-                        console.log('Arre GAT')
                     }
-                    console.log("bomboInterval->"+idPlay)
                 }
                 
                 //We call the ballRolling with a set interval
                 bomboInterval = setInterval(ballRolling, speedBalls *1000);
 
                 pubSub.subscribe("linea_accepted", (data) => {
-                    console.log(data);
                     //clear Interval
                     clearInterval(bomboInterval);
 

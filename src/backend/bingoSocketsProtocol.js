@@ -19,6 +19,8 @@ function createBingoProtocol(io){
     //console.log("NEVER REACHED");
     //A player wants to join a bingo game
     socket.on('join', playerName => {
+      //Aqui viene directamente de modalmainmenu
+
       let bingoCard = new BingoCard(playerName);
       // We create a random id in order to create a hash
       // only known by joined user in order ti avoid fake cards
@@ -65,6 +67,74 @@ function createBingoProtocol(io){
       // });
   
     });
+
+
+
+
+
+
+
+
+
+    //GAME MANUAL
+    socket.on('joinManual', playerName =>{
+      //Aqui viene directamente de modalmainmenu
+
+      let bingoCard = new BingoCard(playerName);
+      // We create a random id in order to create a hash
+      // only known by joined user in order ti avoid fake cards
+      let card = {
+        id:"card_id_"+playerName,
+        username:playerName,
+        cardMatrix:bingoCard.getMatrix(),
+        checksum:"checksum card"
+      }
+      //Should be provided to other jooined players
+      let card_hidden = {
+        username: playerName,
+        card:bingoCard.getMatrix()
+      }
+     
+      game=gameController.getCurrentGame(card_hidden,pubSub);
+      //if (!game.pubSub) game.pubSub = new PubSub();
+      
+      //The most important thing. We register socket in a room 'id'
+      //that should be shared by all players on the same game
+      socket.join(game.id);
+      card.gameID = game.id;
+      //SEND TO JOINED USER THE CARD WITH ID AND CHECKSUM
+      io.to(socket.id).emit('joined_game', JSON.stringify(card));
+  
+      //SEND TO EVERY PLAYER IN THE GAME THAT NEW PLAYER HAS JOINED, AND ONLY THE CARDMATRIX and USERNAME
+      io.sockets.in(game.id).emit('joined',JSON.stringify(game));
+  
+      //PUBSUB ------
+      //The only publisher of this event is gameController
+      pubSub.subscribe("starts_game", (data) => {
+        io.sockets.in(game.id).emit('starts_game_manual',data);
+        console.log("gameID="+game.id+"starts_game_manual ->"+JSON.stringify(data))
+      });
+      //The only publisher of this event is gameController
+      pubSub.subscribe("new_number", (data) => {
+        if (data != false) io.sockets.in(game.id).emit('new_number',data);
+        console.log("gameID="+game.id+" new_number ->"+data.id+" "+data.num)
+      });
+      //The publishers of this event is gameController and when bingo
+      //is shooted
+      // pubSub.subscribe("end_game", (data) => {
+      //   io.sockets.in(data).emit('end_game',data);
+      // });
+    });
+    //FIN GAME MANUAL
+
+
+
+
+
+
+
+
+
   
     socket.on('disconnect',(info) => {
       console.log("DISCONNECTED");

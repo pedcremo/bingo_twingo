@@ -74,12 +74,25 @@ export const modalLobbyPlayers = (socketIO, card) => {
             
             messagesDiv.innerHTML = messagesDiv.innerHTML + "<li>" + notif + "</li>";
         });
+
+
+
+
+
         //Event notifying game starts. It's triggered by server
         socket.on('starts_game', function (msg) {
             let div_bg = document.getElementById('div_bg');
             clearInterval(intervalTimer);
             //Modal where we render online game: bombo, player card and others players cards            
             showModal(inGameLayout(socket, card, otherPlayers));
+        });
+
+        socket.on('starts_game_manual', function (msg) {
+            console.log("MANUAL GAME");
+            let div_bg = document.getElementById('div_bg');
+            clearInterval(intervalTimer);
+            //Modal where we render online game: bombo, player card and others players cards            
+            showModal(inGameLayout(socket, card, otherPlayers,false));
         });
     }
 

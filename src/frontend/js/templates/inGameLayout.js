@@ -38,7 +38,7 @@ let renderCard = (extractedBalls=[],cardMatrix,player) => {
     document.getElementById(player).innerHTML = out;
 }
 
-export const inGameLayout = (socketIO, card,otherPlayers) => {
+export const inGameLayout = (socketIO, card,otherPlayers,auto=true) => {  //Auto will be false when starts a manual game
 
     const controllers = () => {       
        
@@ -83,7 +83,7 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
                 renderCard(extractedBalls,otherPlayer.card,otherPlayer.username)
             );
             //Check if player card is in 'linia' or bingo state
-            checkBingo(card,extractedBalls,line_status);   
+            auto?checkBingo(card,extractedBalls,line_status):null;   //Only check bingo or linea everytime on auto mode
             if(lastBall){
                 document.getElementById(lastBall).className = 'bingoBall';
             }
@@ -104,6 +104,8 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
                      line_status = true;
                      //Inform server we have linia   
                      socket.emit('linia', { playId: card.gameID, card: card })
+               }else if(!auto){
+                   console.log("NO HAY LINEA");
                }
             })
         
@@ -116,7 +118,9 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
                }
                //Inform server we have bingo
                socket.emit('bingo', { playId: card.gameID, card: card })
-            }
+            }else if(!auto){//We check bingo here when manual mode is activated, and in manual mode we only 
+                console.log("NO HAY BINGO");                                                   //check bingo when client 
+            }                                                                                  //click check bingo button
          }
         
         //Server broadcast all gamers game is over
@@ -140,14 +144,36 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             }, secsModalLinea * 1000);
             line_status = true;
         });
+
+
+    //CHECK MANUAL
+    document.getElementById('check_bingo').onclick= ()=>{
+        console.log("CHECK BINGO");
+        checkBingo(card,extractedBalls,line_status);  
+    }
+    document.getElementById('check_linea').onclick= ()=>{
+        console.log("CHECK LINEA");
+        checkBingo(card,extractedBalls,line_status);  
     }
 
+
+
+
+
+
+    }
+
+//     document.getElementById('check_bingo').onclick= ()=>{
+//         console.log("CHECK BINGO");
+//         // checkBingo(cardMatrix,extractedBalls,pubSub,player);
+//    }
+
+  if(auto){
     return {
         template:
             `
             <div class="gameLayout">
                 <div id="bingoCards" class="cards">
-                
                 </div>
                 <div class="panel">
                     <div id="balls" class="balls__grid"></div>
@@ -156,4 +182,23 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             `,
         controllers: controllers
     }
+  }else{
+    return {
+        template:
+            `
+            <div class="gameLayout">
+                <div id="bingoCards" class="cards">
+                <div class="button" id="check_linea">Check Linea</div>
+                <div class="button" id="check_bingo">Check Bingo</div>
+                </div>
+                <div class="panel">
+                    <div id="balls" class="balls__grid"></div>
+                </div>
+            </div>
+            `,
+        controllers: controllers
+    }
+  }
+
+    
 }

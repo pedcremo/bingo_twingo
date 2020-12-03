@@ -19,11 +19,19 @@ export const modalMainMenu = () => {
         }
        
         document.getElementById('playOnline').onclick = function () {
+            searchGame('auto');
+        }
+        document.getElementById('playOnlineManual').onclick = function () {
+            searchGame('manual');
+        }
+
+        function searchGame(type){
             if(utils.checkName(document.getElementById('usernameP').value)){
                 localStorage.setItem('onlineUsername',document.getElementById('usernameP').value)
                 const socket = io('ws://'+siteIP, {transports: ['websocket']});
                 socket.on('connect', () => {
-                    socket.emit('join', document.getElementById('usernameP').value);                
+                    if(type=='auto'){socket.emit('join', document.getElementById('usernameP').value);}
+                    if(type=='manual'){socket.emit('joinManual', document.getElementById('usernameP').value);}          
                 });
     
                 /* Event triggered once a user joins an 
@@ -60,7 +68,8 @@ export const modalMainMenu = () => {
                     <p class="msg--error" id="msg--err"></p>
                     <div class="menu__options">
                         <button id='playOffline' class="mainMenu__btn menu__offline_btn">Start Offline Game</button>
-                        <button id='playOnline' class="mainMenu__btn menu__online_btn">Search Online Game</button>
+                        <button id='playOnline' class="mainMenu__btn menu__online_btn">Search Online Auto Game</button>
+                        <button id='playOnlineManual' class="mainMenu__btn menu__online_manual_btn">Search Online Manual Game</button>
                     </div>
                     
                 </div>

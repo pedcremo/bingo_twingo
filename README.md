@@ -1,6 +1,7 @@
 # TODO
 - Remove non used imports, non useful lines of code, non updated comments... Try to simplify chunks of code cleaning, summarazing, refactoring, renaming and improving code readability.  
 - The way we start offline and online mode of playing are not unified. In offline mode we have an 'app' closure managing all applicationflow. In online mode is a bunch of concatenated modals with no reliable management.
+-Export/import players from/to a cvs should be removed completely
 - i18n (internationalization. Several languages)
 - Refactor to support CSS theming structuring better html tags and tidyng up current class mess.
 - In online version user should check manually numbers extracted from bombo that matches with their own bingo card. Two modes in settings.js. Automatic, it is how it works now, every ball extracted from bombo matching with one of our card numbers it's highlighted automatically. Manual, if you forget to click on matched number in your bingo own card you miss the chance to get a line or bingo. Otherwise if you click in a wrong card number and claim a bingo or line the server should check validity and aprove or reject claim.

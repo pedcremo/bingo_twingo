@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: frontend/js/utils.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: frontend/js/utils.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import video from '../assets/videos/los_bingueros.mp4';
+import audio from '../assets/audios/Bingo Sound Effect.mp3';
+
+/**
+* It's a function that when any player win the bingo  there is a background audio that sings bingo!!
+* This function I'll  imported it into index and called it in  pubSub.subscribe("BINGO")
+*/
+export function setupAudioBingoWin() {
+    let audioBackground = `
+        &lt;div id="sound">
+            &lt;audio controls autoplay loop id="bingoSound">
+                  &lt;source src="${audio}" type="audio/mpeg">
+             &lt;/audio>
+        &lt;/div>
+        `;
+    let parser = new DOMParser();
+    let bingoAudio = parser.parseFromString(audioBackground, "text/html");
+
+    bingoAudio = bingoAudio.body.firstChild;
+    bingoAudio.currentTime = Math.round(Math.random() * 10);
+    document.body.appendChild(bingoAudio);
+}
+
+/**
+ * Set the backgroundVideo 
+ */
+export function setupBackgroundVideo() {
+    let backgroundVideo = `
+        &lt;div id="div_bg" class="bg">
+            &lt;video autoplay muted loop id="videoBackground">
+                &lt;source src="${video}" type="video/mp4">
+                Your browser does not support HTML5 video.
+            &lt;/video>
+            &lt;i class="fas fa-video-slash btn--removebg" id="remove_video">&lt;/i>
+            &lt;i class="fas fa-volume-mute btn--mute off--red" id="unmuteBtn">&lt;/i>
+        &lt;/div>`;
+    let parser = new DOMParser();
+    let videoEl = parser.parseFromString(backgroundVideo, "text/html");
+    videoEl.currentTime += Math.round(Math.random()*400);
+    videoEl = videoEl.body.firstChild;
+    document.body.appendChild(videoEl);
+    
+
+    let remove_video = document.getElementById('remove_video');
+
+    //We get the video
+    let VideoOnly = document.getElementById('videoBackground');
+
+    //We add the atribute preload with metadata
+    VideoOnly.preload = 'metadata';
+    
+    //When loading the metadata we obtain the maximum duration of the video and we do a random math between 0 and that value
+    VideoOnly.onloadedmetadata = function() {
+        VideoOnly.currentTime = Math.round(Math.random()*VideoOnly.duration);
+    }
+    
+    /**
+     * Mute and unmute the background video button
+     */
+
+    let unmuteBtn = document.getElementById('unmuteBtn');
+    let videoDOM = document.getElementById('videoBackground');
+    unmuteBtn.onclick = function () {
+        videoDOM.muted = !videoDOM.muted;
+        this.className = (videoDOM.muted == true) ? "fas fa-volume-mute btn--mute off--red" : "fas fa-volume-off btn--mute"
+    }
+
+    /**
+     * Remove / show video background
+     */
+
+    remove_video.onclick = function () {
+        if (this.classList.contains('off--red')) {
+            this.className = "fas fa-video-slash btn--removebg"
+            videoDOM.style.display = "block";
+        } else {
+            this.className = "fas fa-video-slash btn--removebg off--red"
+            videoDOM.style.display = "none";
+        }
+    }
+}
+//CHECK NAME FUNCTION
+export let checkName = (name) => {
+    let regEx = /[aA1-zZ9]/;
+    if (regEx.test(name)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+/**
+ * RENDERS BINGO BOMBO AND BINGO CARD
+ */
+//Render bingo bombo
+export let renderBalls = () => {
+    document.getElementById('balls').innerHTML = `${Array.from({length:90},(_,i) => i + 1).map(ball => `&lt;div class='bingoBallEmpty' id='${ball}'>${ball}&lt;/div>`).join("")}`;
+}
+
+//Render card 
+export let renderCard = (extractedBalls=[],cardMatrix,player) => {
+        
+    let out =`&lt;h1>Player ${player}&lt;/h1>
+         &lt;table class='bingoCard'>
+            
+             `+
+              cardMatrix.map((value) => 
+              "&lt;tr>"+value.map((val) =>{
+                   if (val==null){
+                        return "&lt;th class='nulo'>&lt;/th>"
+                   }else{
+                        if (extractedBalls &amp;&amp; extractedBalls.indexOf(val) >= 0){
+                            if (val===extractedBalls[extractedBalls.length-1]){
+                                return "&lt;th class='extracted blink'>"+val+"&lt;/th>";                                  
+                            }else{
+                                return "&lt;th class='extracted'>"+val+"&lt;/th>";                                  
+                            }
+                        }else{
+                             return "&lt;th>"+val+"&lt;/th>"
+                        }
+                   }}).join("")
+              +"&lt;/tr>"                          
+              ).join("")+
+         `&lt;/table>`;
+    document.getElementById(player).innerHTML = out;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BingoCard.html">BingoCard</a></li><li><a href="Bombo.html">Bombo</a></li></ul><h3>Global</h3><ul><li><a href="global.html#app">app</a></li><li><a href="global.html#cacheModal">cacheModal</a></li><li><a href="global.html#checkBingo">checkBingo</a></li><li><a href="global.html#clearModal">clearModal</a></li><li><a href="global.html#debugOption">debugOption</a></li><li><a href="global.html#docReady">docReady</a></li><li><a href="global.html#getBlanks">getBlanks</a></li><li><a href="global.html#getRandomArbitrary">getRandomArbitrary</a></li><li><a href="global.html#imgsBingo">imgsBingo</a></li><li><a href="global.html#randomBingo">randomBingo</a></li><li><a href="global.html#renderBalls">renderBalls</a></li><li><a href="global.html#setupAudioBingoWin">setupAudioBingoWin</a></li><li><a href="global.html#setupBackgroundVideo">setupBackgroundVideo</a></li><li><a href="global.html#showModal">showModal</a></li><li><a href="global.html#transpose">transpose</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu Dec 03 2020 16:17:14 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

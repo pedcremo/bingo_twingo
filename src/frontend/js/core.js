@@ -4,8 +4,6 @@
  * @param {*} fn 
  */
 let docReady = (fn) => {
-
-
     if (document.readyState === "complete" || document.readyState === "interactive") {
         fn();
     } else {
@@ -35,7 +33,6 @@ let debug = (text) => {
  *   </div>
  *  https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
  */
-
 
 let cacheModal;
  /**

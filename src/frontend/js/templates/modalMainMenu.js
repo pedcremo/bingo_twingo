@@ -7,9 +7,8 @@ import io from 'socket.io-client'
 import { modalPlayers } from './modalPlayers';
 
 export const modalMainMenu = () => {
-
+   
     const controllers = () => {
-
         utils.setupBackgroundVideo();
         let siteIP = location.host;//returns the hostname and port of a URL. DOM api
 

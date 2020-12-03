@@ -77,7 +77,6 @@ export const modalLobbyPlayers = (socketIO, card) => {
         //Event notifying game starts. It's triggered by server
         socket.on('starts_game', function (msg) {     
             clearModal('gameLayout'); //remove gamelayout if exist
-            document.getElementById('div_bg').remove();
             clearInterval(intervalTimer);
             showModal(inGameLayout(socket, card, otherPlayers));//Modal where we render online game: bombo, player card and others players cards
         });

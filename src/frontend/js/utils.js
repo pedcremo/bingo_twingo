@@ -20,11 +20,11 @@ export function setupAudioBingoWin() {
     bingoAudio.currentTime = Math.round(Math.random() * 10);
     document.body.appendChild(bingoAudio);
 }
-
 /**
  * Set the backgroundVideo 
  */
 export function setupBackgroundVideo() {
+    console.log("Utils video")
     let backgroundVideo = `
         <div id="div_bg" class="bg">
             <video autoplay muted loop id="videoBackground">
@@ -70,6 +70,7 @@ export function setupBackgroundVideo() {
      */
 
     remove_video.onclick = function () {
+        console.log("hello")
         if (this.classList.contains('off--red')) {
             this.className = "fas fa-video-slash btn--removebg"
             videoDOM.style.display = "block";

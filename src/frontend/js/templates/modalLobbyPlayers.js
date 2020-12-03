@@ -1,4 +1,4 @@
-import { debug, clearModal, showModal } from '../core';
+import {showModal } from '../core';
 import '../../css/modalLobbyPlayers.css';
 //import * as utils from '../js/utils.js'
 import { inGameLayout } from './inGameLayout';
@@ -75,8 +75,7 @@ export const modalLobbyPlayers = (socketIO, card) => {
             messagesDiv.innerHTML = messagesDiv.innerHTML + "<li>" + notif + "</li>";
         });
         //Event notifying game starts. It's triggered by server
-        socket.on('starts_game', function (msg) {
-            let div_bg = document.getElementById('div_bg');
+        socket.on('starts_game', function () {
             clearInterval(intervalTimer);
             //Modal where we render online game: bombo, player card and others players cards            
             showModal(inGameLayout(socket, card, otherPlayers));

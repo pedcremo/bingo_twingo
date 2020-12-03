@@ -5,6 +5,7 @@ import * as utils from '..//utils.js'
 import { modalLobbyPlayers } from './modalLobbyPlayers.js';
 import io from 'socket.io-client'
 import { modalPlayers } from './modalPlayers';
+let settings =require('../../../settings');
 
 export const modalMainMenu = () => {
 
@@ -44,6 +45,10 @@ export const modalMainMenu = () => {
         // Offline Game
         document.getElementById('playOffline').onclick = function () {
             showModal(modalPlayers(), app.start)
+        }
+
+        if(!settings.enableOffline){
+            document.getElementById('playOffline').remove();
         }
     }
 

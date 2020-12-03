@@ -87,7 +87,6 @@
 }
 
 .menu__addPlayer input {
-    border: none;
     outline: none;
     border-bottom: 2px solid rgb(0, 102, 255);
     width: 360px;
@@ -109,7 +108,6 @@
 }
 
 .menu__start_btn {
-    border: none;
     outline: none;
     width: 220px;
     height: 50px;
@@ -183,7 +181,6 @@ input[type=number] {
 
 .spinner__value {
     outline: none;
-    border: none;
     width: 40px;
     height: 40px;
     text-align: center;
@@ -194,10 +191,13 @@ input[type=number] {
 
 .spinner__btn {
     outline: none;
-    border: none;
     width: 60px;
     height: 40px;
     background-color: white;
+}
+
+.spinner__btn,.spinner__value,.menu__start_btn,.menu__addPlayer input{
+    border: none;
 }
 
 .spinner__btn:hover {

@@ -87,7 +87,6 @@ table.tr {
   .close:focus {
     color: #000;
     text-decoration: none;
-    cursor: pointer;
   }
 
   input:focus{
@@ -152,7 +151,6 @@ table.tr {
     z-index: 99;
     transition: 0.1s;
     text-align: center;
-    cursor: pointer;
     width: 35px;
     background-color: rgba(0, 0, 0, 0.473);
   }
@@ -174,7 +172,6 @@ table.tr {
     z-index: 99;
     transition: 0.1s;
     text-align: center;
-    cursor: pointer;
     width: 35px;
     background-color: rgba(0, 0, 0, 0.473);
   }
@@ -226,7 +223,6 @@ table.tr {
   .modal-content-export .button {
     background-color: #0661b9;
     border-radius: 31px;
-    cursor: pointer;
   }
   
 
@@ -247,5 +243,10 @@ table.tr {
     color: white;
     font-size: 16px;
     font-weight: bold;
+
+  }
+
+  /* Cursor pointer */
+  .stop_button,.modal-content-export .button, .btn--removebg,.btn--mute,.close:hover, .close:focus {
     cursor: pointer;
   }

@@ -188,8 +188,8 @@ export const inGameLayout = (socketIO, card,otherPlayers,auto=true) => {  //Auto
             `
             <div class="gameLayout">
                 <div id="bingoCards" class="cards">
-                <div class="button" id="check_linea">Check Linea</div>
-                <div class="button" id="check_bingo">Check Bingo</div>
+                <div class="button mainMenu__btn" id="check_linea">Check Linea</div>
+                <div class="button mainMenu__btn" id="check_bingo">Check Bingo</div>
                 </div>
                 <div class="panel">
                     <div id="balls" class="balls__grid"></div>

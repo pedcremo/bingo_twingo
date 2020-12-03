@@ -18,7 +18,7 @@ export function setupAudioBingoWin() {
 
     bingoAudio = bingoAudio.body.firstChild;
     bingoAudio.currentTime = Math.round(Math.random() * 10);
-    document.body.appendChild(bingoAudio);
+    document.getElementById('gameLayout').appendChild(bingoAudio);
 }
 
 /**

@@ -132,6 +132,7 @@ const app = (() => {
                 // clearModal("bingoCard") BUG
                 showModal(modalLiniaBingo(player, "bingo"), function () {
                     document.getElementById('sound').remove();//remove div audio sound
+                    clearModal('gameLayout');
                     showModal(modalMainMenu());
                 })
             }, 50);

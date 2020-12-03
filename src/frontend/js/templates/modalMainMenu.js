@@ -1,5 +1,5 @@
 import { debug, clearModal, showModal } from '../core';
-import { app } from '../../main.js';
+import { app } from '../offlineMode.js';
 import '../../css/modalMainMenu.css';
 import * as utils from '..//utils.js'
 import { modalLobbyPlayers } from './modalLobbyPlayers.js';

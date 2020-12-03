@@ -1,4 +1,4 @@
-import { app } from '../../main.js';
+import { app } from '../offlineMode.js';
 import { debug, clearModal, showModal } from '../core';
 import '../../css/modalPlayers.css';
 import * as utils from '../utils.js'

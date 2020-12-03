@@ -1,10 +1,7 @@
 import { Bombo } from '../common/bombo.js';
-//let  bingoCard = require('../common/bingoCard.js');
 import { bingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
-//const PubSub = require('../common/pubSub.js');
-let settings = require('../settings.js')
-// import { settings } from "../utils/settings.js";
+import { settings } from '../settings.js';
 
 //CLOSURE
 const gameController = (() => {   
@@ -12,7 +9,7 @@ const gameController = (() => {
     const secsUntilBegin = settings.secsUntilBegin;
     const maxUsers = settings.maxUsers;
     let countDown;
-    const secsLineaWait = settings.secsLineaWait;
+    const secsLineaWait = settings.secsLineaWait;    
     const speedBalls = settings.ballspeed;
     
     //Maps id -> Map object with game informations

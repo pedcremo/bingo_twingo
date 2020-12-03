@@ -1,58 +1,19 @@
-import video from '../../assets/videos/los_bingueros.mp4';
-import audio from '../../assets/audios/Bingo Sound Effect.mp3';
 import { app } from '../../main.js';
 import { debug, clearModal, showModal } from '../core';
 import '../../css/modalPlayers.css';
 import * as utils from '../utils.js'
-//import * as settings from '../../utils/settings.json'
 let settings = require('../../../settings')
 import { modalMainMenu } from './modalMainMenu';
-
-/**
- * Set the backgroundVideo 
- */
-function setupBackgroundVideo() {
-    let backgroundVideo = `
-        <div id="div_bg" class="bg">
-            <video autoplay muted loop id="videoBackground">
-                <source src="${video}" type="video/mp4">
-                Your browser does not support HTML5 video.
-            </video>
-            <i class="fas fa-video-slash btn--removebg" id="remove_video"></i>
-            <i class="fas fa-volume-mute btn--mute off--red" id="unmuteBtn"></i>
-        </div>`;
-    let parser = new DOMParser();
-    let videoEl = parser.parseFromString(backgroundVideo, "text/html");
-    videoEl = videoEl.body.firstChild;
-    document.body.appendChild(videoEl);
-}
-
 
 /**
 * It's a function that when any player win the bingo  there is a background audio that sings bingo!!
 * This function I'll  imported it into index and called it in  pubSub.subscribe("BINGO")
 */
-export function setupAudioBingoWin() {
-    let audioBackground = `
-        <div id="sound">
-            <audio controls autoplay loop id="bingoSound">
-                  <source src="${audio}" type="audio/mpeg">
-             </audio>
-        </div>
-        `;
-    let parser = new DOMParser();
-    let bingoAudio = parser.parseFromString(audioBackground, "text/html");
-
-    bingoAudio = bingoAudio.body.firstChild;
-    bingoAudio.currentTime = Math.round(Math.random() * 10);
-    document.body.appendChild(bingoAudio);
-}
-
 export const modalPlayers = () => {
 
     const controllers = () => {
         let playersNames = JSON.parse(localStorage.getItem('playersNames')) || [];
-        setupBackgroundVideo();
+        utils.setupBackgroundVideo();
         clearModal("gameLayout") //clear the game
 
         // Draw the players in localStorage. Each time you add or delete a player, this function is called.

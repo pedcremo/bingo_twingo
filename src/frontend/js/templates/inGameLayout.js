@@ -109,22 +109,14 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
                }
             })
         
-            if (bingo && bingo_status == false) {
-            
-               let send = {
-                    game_id: card.gameID,
-                    nickname: card.username,
-                    card: card,
-               }
-               //Inform server we have bingo
-               socket.emit('bingo', { playId: card.gameID, card: card })
-            }
-         }
+            if (bingo && bingo_status == false) socket.emit('bingo', { playId: card.gameID, card: card })
+        }
         
         //Server broadcast all gamers game is over
         socket.on('end_game', function (msg) {
             console.log(msg);
         });
+
         //Server broadcast all gamers bingo claim has been accepted
         socket.on('bingo_accepted', function (msg) {
             let username = msg.card.username;

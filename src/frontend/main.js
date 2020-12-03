@@ -2,14 +2,12 @@
 import './css/style.css';
 import './css/ingame.css';
 import { docReady, showModal, clearModal, debug } from './js/core.js';
-//import './js/card.js';
 import { Bombo } from '../common/bombo.js';
 import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
-import { modalPlayers, setupAudioBingoWin } from './js/templates/modalPlayers.js';
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
-// import  * as settings  from '../utils/settings';
+import * as utils from './js/utils.js'
 let settings = require('../settings')
 
 /**
@@ -20,7 +18,6 @@ let settings = require('../settings')
  */
 
 const app = (() => {
-    console.log(settings.ballspeed);
     let myApp;
     const speed = settings.ballspeed; //in miliseconds
     let bombo;
@@ -31,16 +28,8 @@ const app = (() => {
     /* Every time runs pick a ball from bombo bingo game */
     let getBallFromBombo = () => {
         /* Get a ball from bombo */
-        let num = bombo.pickNumber();
-
-        /* If num is a real number we inform all subscribers we have just picked a ball */
-        if (num) {
-            pubSub.publish("New Number", bombo.getExtractedNumbers());
-
-        /* otherwise means bombo is running out of balls and we should finish the game */    
-        } else {
-            stop();
-        }
+        if (bombo.pickNumber()) pubSub.publish("New Number", bombo.getExtractedNumbers());
+        else stop();
     };
 
     /* Stop bingo play an clear timer */
@@ -103,7 +92,6 @@ const app = (() => {
         obviously we stop bingo playing until modal is closed 
         */        
         pubSub.subscribe("LINIA", (player) => {
-            debug("Linia");            
             /* Stop bingo playing */
             stop();
             /* As linia only could be awarded once per playing we delete that event
@@ -112,8 +100,6 @@ const app = (() => {
             /* Show modal */
             setTimeout(function () {
                 showModal(modalLiniaBingo(player, "linea"), function () {
-                    debug("SPEEEED");
-                    debug(speed);
                     myApp = setInterval(getBallFromBombo, app.speed);
                 },false)
             }, 50);
@@ -127,7 +113,7 @@ const app = (() => {
         pubSub.subscribe("BINGO", (player) => {
             stop();
             /* call audio song to enhance bingo prize experience*/
-            setupAudioBingoWin();
+            utils.setupAudioBingoWin();
             /* Show bingo modal with animation and player awarded */
             setTimeout(function () {
                 /* Delete BINGO event from publish/subscriber mechanism */

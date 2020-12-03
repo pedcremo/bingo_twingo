@@ -1,10 +1,6 @@
 import { Bombo } from '../common/bombo.js';
-//let  bingoCard = require('../common/bingoCard.js');
-import { bingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
-//const PubSub = require('../common/pubSub.js');
 let settings = require('../settings.js')
-// import { settings } from "../utils/settings.js";
 
 //CLOSURE
 const gameController = (() => {   
@@ -42,10 +38,10 @@ const gameController = (() => {
                 //Remove countDown timer. Its's nod needed because
                 //we are going to start the game
                 clearInterval(countDown);
-                //pubSub.publish("starts_game",JSON.stringify({id:currentGame.get('id'),players:currentGame.get('listPlayers'),countDown:currentGame.get('countDown')}));
-                currentGame.set('bombo',new Bombo);                
+
+                currentGame.set('bombo', new Bombo);
+
                 let bombo = currentGame.get("bombo");
-               
                 let idPlay = currentGame.get('id');
 
                 //Ball rolling function
@@ -53,18 +49,14 @@ const gameController = (() => {
                     let realGame=gamesOnFire.get(idPlay)
                     
                     let num = bombo.pickNumber();
-                    if (num){ 
-                        pubSub.publish("new_number",{id:realGame.get('id'),num:num});
-                    }else{
+                    if (num) pubSub.publish("new_number",{id:realGame.get('id'),num:num});
+                    else{
                         pubSub.publish("end_game",realGame.get('id'));
                         //Stop throwing balls from bombo
                         clearInterval(bomboInterval);
                     }
-                    if (!realGame.get('bomboInterval')) {
-                        realGame.set('bomboInterval',bomboInterval)
-                        console.log(realGame.get('bomboInterval'));
-                        console.log('Arre GAT')
-                    }
+                    if (!realGame.get('bomboInterval')) realGame.set('bomboInterval',bomboInterval)
+                    
                     console.log("bomboInterval->"+idPlay)
                 }
                 
@@ -72,7 +64,6 @@ const gameController = (() => {
                 bomboInterval = setInterval(ballRolling, speedBalls *1000);
 
                 pubSub.subscribe("linea_accepted", (data) => {
-                    console.log(data);
                     //clear Interval
                     clearInterval(bomboInterval);
 
@@ -97,8 +88,7 @@ const gameController = (() => {
             //Every second we decrement countDown until we me call above
             //setTimeout
             countDown = setInterval(()=>{
-                let count = currentGame.get('countDown');
-                currentGame.set('countDown',(count-1));
+                currentGame.set('countDown',(currentGame.get('countDown') - 1));
             },1000);
 
         //There's a game has been started by other user, so we join it

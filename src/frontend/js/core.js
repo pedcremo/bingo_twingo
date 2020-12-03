@@ -47,8 +47,7 @@ let cacheModal;
   * @param {*} callback 
   */
  let showModal = (templateHtml, callback, close = true) => {
-     let template = templateHtml
-     if (templateHtml.template) template = templateHtml.template;
+     let template = (templateHtml.template) ? templateHtml.template : templateHtml;
      let parser = new DOMParser();
      let modal = parser.parseFromString(template, "text/html");
  
@@ -57,22 +56,16 @@ let cacheModal;
  
      Array.from(modal.body.children).forEach((item) => {
          //Remove layer If thereis in DOM a div with the same id 
-         if (document.getElementById(item.id)) {
-             document.getElementById(item.id).remove();
-         }
+         if (document.getElementById(item.id)) document.getElementById(item.id).remove();
  
          /* If the current modal doesn't have any ID, we add a provisional one */
- 
-         if (item.id == '' || item.id == null || item.id == undefined && close == true) {
-             item.id = 'cacheModal'
-         }
+         if (!item.id && close == true) item.id = 'cacheModal';
  
          /* Save the ID in cache Var */
          if (close == true) cacheModal = item.id;
  
          document.body.appendChild(item);
-         if (item.className == 'modal')
-             item.style.display = "block";
+         if (item.className == 'modal') item.style.display = "block";
          // Get the <span> element that closes the modal
          let span = item.getElementsByClassName("close")[0];
          // When the user clicks on <span> (x), close the modal

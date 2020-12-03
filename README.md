@@ -1,15 +1,15 @@
 # TODO
--Remove non used imports, lines of code, non updated comments. Simplify chunks of code simplifying and improving code readability  
-- Way we start offline and offline mode or playing are not unified. In offline we have an 'app' closure managing all flow. In online is a bunch of concatenated modals with no real manager.
-- i18n
-- Refactor to support CSS theming structuring better html structure and tidyng up class mess.
-- In online version user should check manually numbers extracted from bombo that matches with their own bingo card. Two modes in settings.js. Automatic, it is how it works now, every ball extracted from bombo matching with one of our card numbers it's highlighted automatically. Manual, if you forget to click on matched number in your bingo card you miss you oportunity to get a line or bingo. Otherwise if you click in a wrong card number and claim a bingo or line server should check validity.
-- One test for every .js file in our src/ with several unit testing assertiions each one using jest. Unit test coverage above 90% of whole code.
-- Continous Integration. A way to deploy in a free hosting service(heroku) an exact mirror of our current branch 'main' code in an open accessible server on Internet
+- Remove non used imports, non useful lines of code, non updated comments... Try to simplify chunks of code cleaning, summarazing, refactoring, renaming and improving code readability.  
+- The way we start offline and online mode of playing are not unified. In offline mode we have an 'app' closure managing all applicationflow. In online mode is a bunch of concatenated modals with no reliable management.
+- i18n (internationalization. Several languages)
+- Refactor to support CSS theming structuring better html tags and tidyng up current class mess.
+- In online version user should check manually numbers extracted from bombo that matches with their own bingo card. Two modes in settings.js. Automatic, it is how it works now, every ball extracted from bombo matching with one of our card numbers it's highlighted automatically. Manual, if you forget to click on matched number in your bingo own card you miss the chance to get a line or bingo. Otherwise if you click in a wrong card number and claim a bingo or line the server should check validity and aprove or reject claim.
+- One unit test for every .js file in our src/ with several unit testing assertiions each, one using jest library. Unit testing coverage above 90% whole code.
+- Continous Integration. A way to deploy in a free hosting service(heroku or other) an exact mirror of our current git 'main' branch in an open accessible server on Internet. (github webhooks could help)
 - package.json should include 'doc' script. It will build programming documentation inside doc/ folder. Not anywhere else. Using jsdoc3 module.
-- Implement a basic routing system with these routes: /, online, offline, contact, signin, singup, logout, about.
+- Implement a basic routing system with at least these routes: /, online, offline, contact, signin, singup, logout, about.
 - Once we have online mode it's time to remove offline play mode. Or at least it should be congigurable from settings.js. enableOffline=true/false to let play or not offline
--Dockerfile
+- Dockerfile
 
 
 # BINGO TWINGO

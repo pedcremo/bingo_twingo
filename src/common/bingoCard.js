@@ -92,10 +92,7 @@ function checkBingo(cardMatrix,extractedBalls,pubSub,player){
           else pubSub.publish("LINIA",player);       
      })     
 
-     if (bingo) {
-          pubSub.publish("BINGO",player)
-          //debug("BINGO "+player)
-     }
+     if (bingo) pubSub.publish("BINGO", player)
 }
 /**
  * Returns count random numbers between min (inclusive) and max (exclusive)

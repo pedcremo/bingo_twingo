@@ -16,7 +16,6 @@ function createBingoProtocol(io){
     //Only one pubSub instance per socket room 
     let pubSub = new PubSub();
     let game;
-    //console.log("NEVER REACHED");
     //A player wants to join a bingo game
     socket.on('join', playerName => {
       let bingoCard = new BingoCard(playerName);
@@ -35,7 +34,6 @@ function createBingoProtocol(io){
       }
      
       game=gameController.getCurrentGame(card_hidden,pubSub);
-      //if (!game.pubSub) game.pubSub = new PubSub();
       
       //The most important thing. We register socket in a room 'id'
       //that should be shared by all players on the same game
@@ -51,49 +49,28 @@ function createBingoProtocol(io){
       //The only publisher of this event is gameController
       pubSub.subscribe("starts_game", (data) => {
         io.sockets.in(game.id).emit('starts_game',data);
-        console.log("gameID="+game.id+"starts_game ->"+JSON.stringify(data))
       });
       //The only publisher of this event is gameController
       pubSub.subscribe("new_number", (data) => {
         if (data != false) io.sockets.in(game.id).emit('new_number',data);
-        console.log("gameID="+game.id+" new_number ->"+data.id+" "+data.num)
       });
-      //The publishers of this event is gameController and when bingo
-      //is shooted
-      // pubSub.subscribe("end_game", (data) => {
-      //   io.sockets.in(data).emit('end_game',data);
-      // });
+      //The publishers of this event is gameController and when bingo is shooted
   
     });
   
-    socket.on('disconnect',(info) => {
-      console.log("DISCONNECTED");
-      console.log(info);
-    });
+    socket.on('disconnect',(info) => console.log("DISCONNECTED "+info) );
   
     socket.on('bingo',playInfo =>{
-      
-  
-      pubSub.unsubscribe('new_number');  
-      console.log("GAME INFO "+JSON.stringify(game)); 
-      //console.log("bomboTimer "+game.bomboTimer);   
-      //clearInterval(game.bomboTimer);
-      console.log("bingo ->"+JSON.stringify(playInfo));
+      pubSub.unsubscribe('new_number');
       io.sockets.in(game.id).emit('bingo_accepted',playInfo);
-      
       //Stop throwing balls from bombo
       let gId=gameController.getGameById(game.id);
       clearInterval(gId.get('bomboInterval'));
       pubSub.publish("end_game",game.id);
       io.sockets.in(game.id).emit('end_game',game.id);
-      // io.sockets.in(game.id).clients((error, socketIds) => {
-      //   if (error) throw error;
-      //   socketIds.forEach(socketId => io.sockets.sockets[socketId].leave(game.id));
-      // });
     });
   
     socket.on('linia',playInfo =>{
-      console.log("linia ->"+JSON.stringify(playInfo));
       pubSub.publish("linea_accepted",playInfo);
       io.sockets.in(game.id).emit('linia_accepted',playInfo);
     });

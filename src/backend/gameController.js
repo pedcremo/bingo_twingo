@@ -33,13 +33,10 @@ const gameController = (() => {
             currentGame.set('listPlayers',[cardHidden]);
             currentGame.set('countDown',secsUntilBegin);
             
-            //We start game when time is over or we have reached
-            //max users goal
+            //We start game when time is over or we have reached max users goal
             setTimeout(() => {
-                //Remove countDown timer. Its's nod needed because
-                //we are going to start the game
+                //Remove countDown timer. Its's nod needed because we are going to start the game
                 clearInterval(countDown);
-                //pubSub.publish("starts_game",JSON.stringify({id:currentGame.get('id'),players:currentGame.get('listPlayers'),countDown:currentGame.get('countDown')}));
                 currentGame.set('bombo',new Bombo);                
                 let bombo = currentGame.get("bombo");
                
@@ -59,17 +56,13 @@ const gameController = (() => {
                     }
                     if (!realGame.get('bomboInterval')) {
                         realGame.set('bomboInterval',bomboInterval)
-                        console.log(realGame.get('bomboInterval'));
-                        console.log('Arre GAT')
                     }
-                    console.log("bomboInterval->"+idPlay)
                 }
                 
                 //We call the ballRolling with a set interval
                 bomboInterval = setInterval(ballRolling, speedBalls *1000);
 
                 pubSub.subscribe("linea_accepted", (data) => {
-                    console.log(data);
                     //clear Interval
                     clearInterval(bomboInterval);
 
@@ -81,9 +74,7 @@ const gameController = (() => {
                 pubSub.subscribe('end_game',(data) =>{
                     clearInterval(bomboInterval);
                 })
-                
-                //currentGame.set('bomboTimer',bomboInterval);
-                //realGame = new Map(currentGame);
+
                 pubSub.publish("starts_game",JSON.stringify({id:currentGame.get('id'),players:currentGame.get('listPlayers'),countDown:currentGame.get('countDown')})); 
                 gamesOnFire.set(currentGame.get('id'),new Map(currentGame))
                 //RESET currentGame
@@ -91,8 +82,7 @@ const gameController = (() => {
 
             }, secsUntilBegin * 1000);
 
-            //Every second we decrement countDown until we me call above
-            //setTimeout
+            //Every second we decrement countDown until we me call above setTimeout
             countDown = setInterval(()=>{
                 let count = currentGame.get('countDown');
                 currentGame.set('countDown',(count-1));
@@ -121,4 +111,3 @@ const gameController = (() => {
 })();
 
 export {gameController};
-//module.exports = gameController();

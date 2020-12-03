@@ -70,8 +70,7 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         //Render bombo
         renderBalls();
 
-        //Every time server picks upn a ball from bombo this event is broadcasted to all online players
-        //joined on same game (room)
+        //Every time server picks upn a ball from bombo this event is broadcasted to all online players joined on same game (room)
         socket.on('new_number', function (msg) {       
             //Add new ball to array with already extracted balls     
             extractedBalls.push(msg.num)
@@ -95,7 +94,6 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         
         //Check bingo or linia on a card
         let checkBingo = (card, extractedBalls,line_status) => {
-            console.log(extractedBalls.length);
             let bingo = true;
             card.cardMatrix.forEach((row) => {
                 let linia = row.filter((val) => { if (!extractedBalls.includes(val) && val != null) return val }).length;

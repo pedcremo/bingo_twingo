@@ -5,7 +5,6 @@ import { docReady, showModal, clearModal, debug } from './js/core.js';
 import { Bombo } from '../common/bombo.js';
 import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
-import { modalPlayers, setupAudioBingoWin } from './js/templates/modalPlayers.js';
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
 import { settings } from '../settings';
@@ -97,8 +96,7 @@ const app = (() => {
         we show up a modal with the player awarded and a gif animation 
         obviously we stop bingo playing until modal is closed 
         */        
-        pubSub.subscribe("LINIA", (player) => {
-            debug("Linia");            
+        pubSub.subscribe("LINIA", (player) => {            
             /* Stop bingo playing */
             stop();
             /* As linia only could be awarded once per playing we delete that event
@@ -107,8 +105,6 @@ const app = (() => {
             /* Show modal */
             setTimeout(function () {
                 showModal(modalLiniaBingo(player, "linea"), function () {
-                    debug("SPEEEED");
-                    debug(speed);
                     myApp = setInterval(getBallFromBombo, app.speed);
                 },false)
             }, 50);
@@ -127,7 +123,6 @@ const app = (() => {
             setTimeout(function () {
                 /* Delete BINGO event from publish/subscriber mechanism */
                 pubSub.unsubscribe("BINGO");
-                // clearModal("bingoCard") BUG
                 showModal(modalLiniaBingo(player, "bingo"), function () {
                     document.getElementById('sound').remove();//remove div audio sound
                     clearModal('gameLayout');

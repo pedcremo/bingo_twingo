@@ -22,21 +22,6 @@ let debug = (text) => {
     if (debugOption) console.log(text);
 }
 
-/**
- * <!-- The Modal -->
- *   <div id="myModal" class="modal">
- * 
- *  <!-- Modal content -->
- *  <div class="modal-content">
- *    <span class="close">&times;</span>
- *     <p>Some text in the Modal..</p>
- *  </div>
-
- *   </div>
- *  https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
- */
-
-
 let cacheModal;
  /**
   * Function ShowModal

@@ -16,6 +16,8 @@ body {background-color: #88cefa;}
 th.extracted{
     background-color:#fa87cd;
     color:white;
+    text-decoration:line-through;
+    text-decoration-color: red;
 }
 .nulo{
     background-color: lightskyblue;

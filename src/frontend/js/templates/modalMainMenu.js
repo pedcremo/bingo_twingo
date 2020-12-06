@@ -27,11 +27,16 @@ export const modalMainMenu = () => {
 
         function searchGame(type){
             if(utils.checkName(document.getElementById('usernameP').value)){
+                let auto=true;
                 localStorage.setItem('onlineUsername',document.getElementById('usernameP').value)
                 const socket = io('ws://'+siteIP, {transports: ['websocket']});
                 socket.on('connect', () => {
-                    if(type=='auto'){socket.emit('join', document.getElementById('usernameP').value);}
-                    if(type=='manual'){socket.emit('joinManual', document.getElementById('usernameP').value);}          
+
+                    if(type=='manual'){
+                        auto=false;
+                    }
+                    socket.emit('join', ({playerName:document.getElementById('usernameP').value,auto:auto}));                    
+
                 });
     
                 /* Event triggered once a user joins an 

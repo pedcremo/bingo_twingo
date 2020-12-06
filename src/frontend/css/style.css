@@ -17,6 +17,9 @@ th.extracted{
     background-color:#fa87cd;
     color:white;
 }
+
+
+
 .nulo{
     background-color: lightskyblue;
 }
@@ -34,6 +37,7 @@ table.bingoCard th {
 table.tr {
     border:1px solid black;
 }
+
 
 /* The Modal (background) */
 .modal {

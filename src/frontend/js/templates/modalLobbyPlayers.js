@@ -88,7 +88,6 @@ export const modalLobbyPlayers = (socketIO, card) => {
         });
 
         socket.on('starts_game_manual', function (msg) {
-            console.log("MANUAL GAME");
             let div_bg = document.getElementById('div_bg');
             clearInterval(intervalTimer);
             //Modal where we render online game: bombo, player card and others players cards            

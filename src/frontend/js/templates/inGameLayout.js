@@ -12,31 +12,31 @@ let renderBalls = () => {
 
 //Render card 
 let renderCard = (extractedBalls=[],cardMatrix,player) => {
-        
-    let out =`<h1>Player ${player}</h1>
-         <table class='bingoCard'>
-            
-             `+
-              cardMatrix.map((value) => 
-              "<tr>"+value.map((val) =>{
-                   if (val==null){
-                        return "<th class='nulo'></th>"
-                   }else{
-                        if (extractedBalls && extractedBalls.indexOf(val) >= 0){
-                            if (val===extractedBalls[extractedBalls.length-1]){
-                                return "<th class='extracted blink'>"+val+"</th>";                                  
+        let out =`<h1>Player ${player}</h1>
+            <table class='bingoCard' id='bingoCardNumbers'>
+                
+                `+
+                cardMatrix.map((value) => 
+                "<tr>"+value.map((val) =>{
+                    if (val==null){
+                            return "<th class='nulo'></th>"
+                    }else{
+                            if (extractedBalls && extractedBalls.indexOf(val) >= 0){
+                                if (val===extractedBalls[extractedBalls.length-1]){
+                                    return "<th class='extracted blink'>"+val+"</th>";                                  
+                                }else{
+                                    return "<th class='extracted'>"+val+"</th>";                                  
+                                }
                             }else{
-                                return "<th class='extracted'>"+val+"</th>";                                  
+                                return "<th>"+val+"</th>"
                             }
-                        }else{
-                             return "<th>"+val+"</th>"
-                        }
-                   }}).join("")
-              +"</tr>"                          
-              ).join("")+
-         `</table>`;
-    document.getElementById(player).innerHTML = out;
+                    }}).join("")
+                +"</tr>"                          
+                ).join("")+
+            `</table>`;
+        document.getElementById(player).innerHTML = out;
 }
+
 
 export const inGameLayout = (socketIO, card,otherPlayers,auto=true) => {  //Auto will be false when starts a manual game
 
@@ -76,7 +76,9 @@ export const inGameLayout = (socketIO, card,otherPlayers,auto=true) => {  //Auto
             //Add new ball to array with already extracted balls     
             extractedBalls.push(msg.num)
             //Render player card to reflect any change maybe msg.num is in the card and we need to mark it
-            renderCard(extractedBalls,card.cardMatrix,card.username);
+            //Aqui se llama cada vez
+            auto?renderCard(extractedBalls,card.cardMatrix,card.username):null;
+            
             
             //Render others players cards too 
             otherPlayers.forEach((otherPlayer) =>
@@ -118,14 +120,14 @@ export const inGameLayout = (socketIO, card,otherPlayers,auto=true) => {  //Auto
                }
                //Inform server we have bingo
                socket.emit('bingo', { playId: card.gameID, card: card })
-            }else if(!auto){//We check bingo here when manual mode is activated, and in manual mode we only 
-                console.log("NO HAY BINGO");                                                   //check bingo when client 
-            }                                                                                  //click check bingo button
+            }else if(!auto){//We check bingo here when manual mode is activated, and in manual mode we only check bingo when client click check bingo button
+                console.log("NO HAY BINGO");
+            }
          }
         
         //Server broadcast all gamers game is over
         socket.on('end_game', function (msg) {
-            console.log(msg); //Console.log innecesario?
+            console.log(msg);
         });
         //Server broadcast all gamers bingo claim has been accepted
         socket.on('bingo_accepted', function (msg) {
@@ -146,27 +148,30 @@ export const inGameLayout = (socketIO, card,otherPlayers,auto=true) => {  //Auto
         });
 
 
-    //CHECK MANUAL
-    document.getElementById('check_bingo').onclick= ()=>{
-        console.log("CHECK BINGO");
-        checkBingo(card,extractedBalls,line_status);  
+        //CHECK MANUAL
+        if(!auto){
+            document.getElementById('check_bingo_linea').onclick= ()=>{
+                checkBingo(card,extractedBalls,line_status);  
+            }
+            //Detect click on carPlayer here
+            let cardNumbers=document.getElementById('bingoCardNumbers');
+            cardNumbers.onclick=(element)=>{
+              
+                //number is the number clicked
+                let number=element.target;
+                if(number.innerHTML>0){
+                    if(number.classList.contains('extracted')){
+                        number.classList.remove('extracted')
+                    }else{
+                        number.classList.add('extracted');
+                    }
+                }
+            }
+
+        }
+
+        ////
     }
-    document.getElementById('check_linea').onclick= ()=>{
-        console.log("CHECK LINEA");
-        checkBingo(card,extractedBalls,line_status);  
-    }
-
-
-
-
-
-
-    }
-
-//     document.getElementById('check_bingo').onclick= ()=>{
-//         console.log("CHECK BINGO");
-//         // checkBingo(cardMatrix,extractedBalls,pubSub,player);
-//    }
 
   if(auto){
     return {
@@ -184,12 +189,12 @@ export const inGameLayout = (socketIO, card,otherPlayers,auto=true) => {  //Auto
     }
   }else{
     return {
+        
         template:
             `
             <div class="gameLayout">
                 <div id="bingoCards" class="cards">
-                <div class="button mainMenu__btn" id="check_linea">Check Linea</div>
-                <div class="button mainMenu__btn" id="check_bingo">Check Bingo</div>
+                <div class="button mainMenu__btn" id="check_bingo_linea">Check Linea or Bingo</div>
                 </div>
                 <div class="panel">
                     <div id="balls" class="balls__grid"></div>

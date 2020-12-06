@@ -249,3 +249,28 @@ table.tr {
     font-weight: bold;
     cursor: pointer;
   }
+
+.lang-div{
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+}
+
+.lang-select{
+  outline: none;
+  width: auto;
+  min-width: 80px;
+  text-align: center;
+  height: 40px;
+  border-radius: 2px;
+  box-sizing: border-box;
+  border-color: rgb(151, 151, 151);
+  padding: 0px 2px 0px 10px;
+  background-color: rgb(253, 253, 253);
+  color: rgb(39, 39, 39);
+  font-size: 14px;
+  font-weight: bold;
+}

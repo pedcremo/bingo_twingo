@@ -1,0 +1,9 @@
+{
+    "strings" : {
+        "English": "Inglés",
+        "Spanish": "Español",
+        "Start Offline":"Iniciar en local",
+        "Search Online Game": "Buscar partida en línea",
+        "Back":"Volver" 
+    }
+}

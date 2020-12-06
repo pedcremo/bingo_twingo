@@ -111,60 +111,9 @@ export const modalPlayers = () => {
             } else {
                 document.getElementById('msg--err').innerHTML = "\u26A0  Add some players first!"
             }
-
         }
 
-
-        /**
-        * Export Players in csv.
-        */
-
-        let exportBtn = document.getElementById('export');
-        exportBtn.addEventListener('click', function() {    
-            let players = JSON.parse(localStorage.getItem("playersNames")).map(e => e);
-            if (players.length != 0) {
-                let csvContent = "data:text/csv;charset=utf-8," 
-                + players;
-                let encodedUri = encodeURI(csvContent);
-                var link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "players.csv");
-                document.body.appendChild(link);
-
-                link.click();
-            } else {
-                document.getElementById('msg--err').innerHTML = "\u26A0  Add a user before exporting"
-            }
-        });
-
-        /**
-        * Import PLayers in LocalStorage
-        */
-
-        let importBtn = document.getElementById('import');
-        importBtn.addEventListener('click', function() {    
-            let link = document.getElementById('import-file');             
-            link.click();
-        });
-
-        let input_file = document.getElementById('import-file');
-        input_file.addEventListener('change', function (event) {
-            var files = event.target.files;
-            if (files[0].type == "text/csv") {
-                let reader = new FileReader;
-                reader.readAsText(files[0]);
-                reader.onload = function(e) {
-                    localStorage.setItem("playersNames",JSON.stringify(reader.result.split(',')));
-                    renderPlayerList();
-                    input_file.value = "";
-                };
-                document.getElementById('msg--err').innerHTML = "";
-            } else {
-                document.getElementById('msg--err').innerHTML = "\u26A0  The file isn't valid"
-            }
-          }, false);
-
-        //rback button
+        //Back button
         let back = document.getElementById('back_button');
         back.onclick = () =>{
             showModal(modalMainMenu());
@@ -178,7 +127,7 @@ export const modalPlayers = () => {
                 <!-- Modal content -->
                 <div class="modal-content">
                     <h1>BINGO TWINGO</h1>
-                    <button class="menu__start_btn" id="back_button">BACK</button>
+                    <button class="menu__start_btn" id="back_button" data-tr="Back"></button>
                     <p></p>
                     <div class='modal__players__list'>
                         <ol id="listPlayers"></ol>

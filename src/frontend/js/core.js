@@ -1,3 +1,7 @@
+import * as es from '../assets/i18n/locale-es.json'
+const langs = {
+    es: es
+}
 
 /**
  * Checks if DOM is already loades afterwards we call fn 
@@ -74,7 +78,7 @@ let cacheModal;
      }
      //Very Important.Apply controler over template defined in the same template file
      if (templateHtml.controllers) templateHtml.controllers();
-     
+     changeLang();     
  }
 
 /**
@@ -91,7 +95,31 @@ let clearModal = (templateToClear) => {
 
 }
 
+ /**
+  * Function changeLang
+  * This function is used to change the language of the application.
+  * If the lang it's saved in LocaStorage, we set this as default language.
+  * if you specify the language, the function will choose the language in the upper constant (contains the imports)
+  * @param {*} lang 
+  */
+
+function changeLang(lang) {
+    lang = lang || localStorage.getItem('app-lang') || 'en'; //Lang = al argumento introducido, al LocalStorage o por defecto ingles
+    localStorage.setItem('app-lang', lang); //Guardar en LocalStorage la seleccion
+    document.getElementById('lang').value = lang; //change current language in select 
+    var elems = document.querySelectorAll('[data-tr]'); //get every element with data-tr attribute
+    
+    // If lang selected isn't the default option (en), we update the text to the new lang, else,
+    // the data-tr text into element
+    if (lang != "en") {
+        let selectedLang = langs[lang].default;
+        elems.forEach((el) => el.innerHTML = selectedLang["strings"][el.dataset.tr])
+    } else {
+        elems.forEach((el) => el.innerHTML = el.dataset.tr)
+    }
+}
 
 
-export { docReady, showModal, clearModal, debug };
+
+export { docReady, showModal, clearModal, debug, changeLang };
 

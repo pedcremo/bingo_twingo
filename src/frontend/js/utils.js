@@ -1,5 +1,6 @@
 import video from '../assets/videos/los_bingueros.mp4';
 import audio from '../assets/audios/Bingo Sound Effect.mp3';
+import {changeLang} from './core'
 
 /**
 * It's a function that when any player win the bingo  there is a background audio that sings bingo!!
@@ -79,6 +80,22 @@ export function setupBackgroundVideo() {
     }
     setupBackgroundVideo.remove = () => document.getElementById('div_bg').remove();
 }
+
+export function setupLanguage(){
+    let langOptions = `
+        <div class="lang-div">
+            <select name="Language" id="lang" class="lang-select">
+                <option value="en" id="btn-en" data-tr="English">English</option>
+                <option value="es" id="btn-es" data-tr="Spanish">Spanish</option>
+            </select>
+        </div>`;
+    let parser = new DOMParser();
+    let langEl = parser.parseFromString(langOptions, "text/html");
+    langEl = langEl.body.firstChild;
+    document.body.appendChild(langEl);
+    document.getElementById('lang').addEventListener('change', function() { changeLang(this.value) });
+}
+
 //CHECK NAME FUNCTION
 export let checkName = (name) => {
     let regEx = /[aA1-zZ9]/;

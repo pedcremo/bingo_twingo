@@ -150,12 +150,6 @@ export const modalPlayers = () => {
                     </div>
                     <span class="remainingPlayers" id="remainingPlayersSpan"></span>
                 </div>
-                <div class="modal-content-export">
-                    <h3>Game settings</h3>
-                    <button id="export" class="button">Export Players</button>
-                    <button id="import" class="button">Import Players</button>
-                    <input type="file" id="import-file" style="display:none"/>
-                </div>
             </div>`,
         controllers: controllers
     }

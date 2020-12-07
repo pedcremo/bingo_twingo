@@ -57,19 +57,20 @@
 }
 
 .bingoCardLayout {
-    width: 400px;
+    width: 370px;
     display: flex;
     flex-direction: column;
-    max-height: 250px;
+    justify-content: space-between;
+    max-height: 230px;
     align-items: center;
     text-align: center;
     box-shadow: 1px 1px 3px 3px rgba(0, 0, 0, 0.4);
     border-radius: 30px;
     /* background-color: rgb(167, 192, 247); */
-    padding-bottom: 20px;
+    padding-bottom: 10px;
 }
 .bingoCardLayoutOther {
-    width: 400px;
+    width: 370px;
     display: flex;
     flex-direction: column;
     max-height: 250px;
@@ -145,6 +146,15 @@ table.bingoCard {
     flex: 0 1 calc(10% - 12px);
 }
 
+.cardNum{
+    user-select: none;
+    cursor: pointer;
+}
+
+.cardNum:hover{
+    background-color: rgb(136, 219, 136);
+}
+
 @media (max-width: 1580px) {
     .cards {
         width: 32%;
@@ -180,4 +190,38 @@ table.bingoCard {
     .bingoBallEmpty{
         font-size: 5vw;
     }
+}
+
+/* New card style */
+.playerCard{
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    border: 3px solid black;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 22px;
+    /* min-height: 0px; */
+    overflow: hidden;
+}
+
+.playerCard__table{
+    margin-right: 0px;
+    display: block;
+    border-collapse: collapse;
+    overflow: hidden;
+    /* border: 1px solid black; */
+}
+
+.playerCard__table tbody tr th{
+    overflow: hidden;
+    border: 1px solid black;
+    height: 30px;
+    width: 30px;
+}
+
+.cardOptions{
+    width: 60%;
+    height: 30px;
+    /* margin-top: 20px; */
+    display: flex;
+    justify-content: space-around;
 }

@@ -13,27 +13,31 @@ let renderBalls = () => {
 let renderCard = (extractedBalls=[],cardMatrix,player) => {
         
     let out =`<h1>Player ${player}</h1>
-         <table class='bingoCard'>
-            
-             `+
-              cardMatrix.map((value) => 
-              "<tr>"+value.map((val) =>{
-                   if (val==null){
-                        return "<th class='nulo'></th>"
-                   }else{
-                        if (extractedBalls && extractedBalls.indexOf(val) >= 0){
-                            if (val===extractedBalls[extractedBalls.length-1]){
-                                return "<th class='extracted blink'>"+val+"</th>";                                  
+        <div class="playerCard">
+            <table class='bing0Card playerCard__table'> `+
+                cardMatrix.map((value) => 
+                "<tr>"+value.map((val) =>{
+                    if (val==null){
+                            return "<th class='nulo'></th>"
+                    }else{
+                            if (extractedBalls && extractedBalls.indexOf(val) >= 0){
+                                if (val===extractedBalls[extractedBalls.length-1]){
+                                    return "<th class='cardNum extracted blink'>"+val+"</th>";                                  
+                                }else{
+                                    return "<th class='cardNum extracted'>"+val+"</th>";                                  
+                                }
                             }else{
-                                return "<th class='extracted'>"+val+"</th>";                                  
+                                return "<th class='cardNum'>"+val+"</th>"
                             }
-                        }else{
-                             return "<th>"+val+"</th>"
-                        }
-                   }}).join("")
-              +"</tr>"                          
-              ).join("")+
-         `</table>`;
+                    }}).join("")
+                +"</tr>"                          
+                ).join("")+
+            `</table>
+        </div>
+        <div class="cardOptions">
+            <button id="claimLine" class"line-btn">Line!</button>
+            <button id="claimBingo" class"bingo-btn">Bingo!</button>
+        </div>`;
     document.getElementById(player).innerHTML = out;
 }
 
@@ -47,6 +51,19 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         let extractedBalls = [];
         let lastBall;
         let secsModalLinea = settings.secsLineaWait;
+        let pickedNums = [];
+
+        let markNumber = (el) => {
+            let num = Number(el.innerHTML);
+            if (!pickedNums.includes(num)){
+                pickedNums.push(num);
+                el.classList = 'extracted';
+            } else {
+                pickedNums = pickedNums.filter((el) => { return  el != num })
+                el.classList = 'cardNum';
+            } 
+            console.log(pickedNums);
+        }
         
         //Create a div to contain player online bingo card. Id == username
         let divRoot = document.createElement('div');
@@ -57,6 +74,8 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         bingoCardsElement.appendChild(divRoot);
         //Render player card
         renderCard(extractedBalls,card.cardMatrix,card.username);
+        let cardNums = [...document.querySelectorAll('.cardNum')];
+        cardNums.forEach( (el) => el.onclick = () => markNumber(el));
         
         //Render other players cards in order to have a visual reference
         otherPlayers.forEach((otherPlayer) => {
@@ -75,14 +94,14 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             //Add new ball to array with already extracted balls     
             extractedBalls.push(msg.num)
             //Render player card to reflect any change maybe msg.num is in the card and we need to mark it
-            renderCard(extractedBalls,card.cardMatrix,card.username);
+            // renderCard(extractedBalls,card.cardMatrix,card.username);
             
             //Render others players cards too 
             otherPlayers.forEach((otherPlayer) =>
                 renderCard(extractedBalls,otherPlayer.card,otherPlayer.username)
             );
             //Check if player card is in 'linia' or bingo state
-            checkBingo(card,extractedBalls,line_status);   
+            // checkBingo(card,extractedBalls,line_status);   
             if(lastBall){
                 document.getElementById(lastBall).className = 'bingoBall';
             }

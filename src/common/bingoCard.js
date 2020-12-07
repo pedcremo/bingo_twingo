@@ -13,7 +13,6 @@ export class BingoCard{
           let templateRow = [0,1,2,3,4,5,6,7,8];
           let cardMatrix = [[...templateRow],[...templateRow],[...templateRow]];
           
-        
           //Frontend have DOMelement to render. Backend not
           let divRoot;
           if (rootElement) {

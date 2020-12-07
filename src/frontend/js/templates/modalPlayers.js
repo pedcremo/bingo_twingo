@@ -7,7 +7,6 @@ import { modalMainMenu } from './modalMainMenu';
 
 export const modalPlayers = () => {
     const controllers = () => {
-        utils.setupBackgroundVideo();
         let playersNames = JSON.parse(localStorage.getItem('playersNames')) || [];
         clearModal("gameLayout") //clear the game
 
@@ -94,11 +93,7 @@ export const modalPlayers = () => {
             if (event.target.value <= 0) event.target.value = 0.1;
             if (event.target.value > 5) event.target.value = 5;
         });
-       
-     
-        // let remove_video = document.getElementById('remove_video');
-        // let div_bg = document.getElementById('div_bg');
-
+    
         /**
          * On click play Button, game starts.
          */
@@ -108,8 +103,8 @@ export const modalPlayers = () => {
             if (playersNames.length !== 0 && playersNames != undefined) { //Check there are players added to the game
                 let m = document.getElementById('playersForm');
                 m.style.display = "none";
-                div_bg.remove();
                 app.speed = (parseFloat(inputVal.value) * 1000); //SET GAME SPEED
+                utils.RemoveLang();//REMOVE THE SELECT LANG WHEN START THE  GAME
                 app.start();
             } else {
                 document.getElementById('msg--err').innerHTML = "\u26A0  Add some players first!"
@@ -130,7 +125,7 @@ export const modalPlayers = () => {
                 <!-- Modal content -->
                 <div class="modal-content">
                     <h1>BINGO TWINGO</h1>
-                    <button class="menu__start_btn" id="back_button">BACK</button>
+                    <button class="menu__start_btn" id="back_button" data-tr="Back"></button>
                     <p></p>
                     <div class='modal__players__list'>
                         <ol id="listPlayers"></ol>
@@ -141,7 +136,7 @@ export const modalPlayers = () => {
                     </div>
                     <p class="msg--error" id="msg--err"></p>
                     <div class="menu__options">
-                        <button id='playBtn' class="menu__start_btn">START GAME</button>
+                        <button id='playBtn' class="menu__start_btn" data-tr="Start Game"></button>
                     </div>
                     <div class="spinner__opts" style="margin-left:10px">
                         <span> Timer: (sec)</span>

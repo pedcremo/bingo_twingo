@@ -1,3 +1,24 @@
+import * as es from '../assets/Languages/i18.json'
+/**
+ * Const setLang to specify the language
+ */
+const setLang = {
+    es: es
+}
+
+/**
+ * <!-- The Modal -->
+ *   <div id="myModal" class="modal">
+ * 
+ *  <!-- Modal content -->
+ *  <div class="modal-content">
+ *    <span class="close">&times;</span>
+ *     <p>Some text in the Modal..</p>
+ *  </div>
+
+ *   </div>
+ *  https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
+ */
 
 /**
  * Checks if DOM is already loades afterwards we call fn 
@@ -20,19 +41,6 @@ let debug = (text) => {
     if (debugOption) console.log(text);
 }
 
-/**
- * <!-- The Modal -->
- *   <div id="myModal" class="modal">
- * 
- *  <!-- Modal content -->
- *  <div class="modal-content">
- *    <span class="close">&times;</span>
- *     <p>Some text in the Modal..</p>
- *  </div>
-
- *   </div>
- *  https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
- */
 
 let cacheModal;
  /**
@@ -87,6 +95,7 @@ let cacheModal;
      //Very Important.Apply controler over template defined in the same template file
      if (templateHtml.controllers) templateHtml.controllers();
      
+     ChooseLang();
  }
 
 /**
@@ -104,6 +113,27 @@ let clearModal = (templateToClear) => {
 }
 
 
+ /**
+  * Function ChooseLang
+  * This function is used to change the language of the application.
+  * If the lang it's saved in LocaStorage, we set this as default language.
+  * Lang = the argument in localstoratge or english by default, here you can change the default language
+  * @param {*} lang 
+  */
 
-export { docReady, showModal, clearModal, debug };
+
+let ChooseLang = (lang) => {
+    lang = lang || localStorage.getItem('languages') || 'en'; 
+    localStorage.setItem('languages', lang); //stored in localstoratge
+    document.getElementById('lang').value = lang; //change current language in the  select option
+    var elements = document.querySelectorAll('[data-tr]'); //get every element with data-tr attribute of ours templates literals
+    if (lang != "en") {// If lang selected isn't the default option english in this case, we update it to the new lang, else,
+        let chosen_language = setLang[lang].default;
+        elements.forEach((el) => el.innerHTML = chosen_language["data"][el.dataset.tr])
+    } else {
+        elements.forEach((el) => el.innerHTML = el.dataset.tr)// the data-tr text into element
+    }
+}
+
+export { docReady, showModal, clearModal, debug  , ChooseLang };
 

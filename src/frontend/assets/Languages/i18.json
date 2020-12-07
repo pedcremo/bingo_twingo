@@ -1,0 +1,12 @@
+{
+    "data" : {
+        "English": "Inglés",
+        "Spanish": "Español",
+        "Start Offline":"Modo Sin Conexion",
+        "Online Game": "Partida Online",
+        "Back":"Volver",
+        "Start Game":"Empezar",
+        "Time left":"Tiempo Restante",
+        "Chat Messages":"Información de la partida"
+    }
+} 

@@ -1,6 +1,5 @@
 import { gameController } from './gameController'
 import { PubSub } from '../common/pubSub.js';
-//import BingoCard from '../common/bingoCard'
 import { BingoCard } from '../common/bingoCard.js';
 
 
@@ -16,7 +15,6 @@ function createBingoProtocol(io){
     //Only one pubSub instance per socket room 
     let pubSub = new PubSub();
     let game;
-    //console.log("NEVER REACHED");
     //A player wants to join a bingo game
     socket.on('join', playerName => {
       let bingoCard = new BingoCard(playerName);
@@ -35,8 +33,6 @@ function createBingoProtocol(io){
       }
      
       game=gameController.getCurrentGame(card_hidden,pubSub);
-      //if (!game.pubSub) game.pubSub = new PubSub();
-      
       //The most important thing. We register socket in a room 'id'
       //that should be shared by all players on the same game
       socket.join(game.id);
@@ -58,12 +54,6 @@ function createBingoProtocol(io){
         if (data != false) io.sockets.in(game.id).emit('new_number',data);
         console.log("gameID="+game.id+" new_number ->"+data.id+" "+data.num)
       });
-      //The publishers of this event is gameController and when bingo
-      //is shooted
-      // pubSub.subscribe("end_game", (data) => {
-      //   io.sockets.in(data).emit('end_game',data);
-      // });
-  
     });
   
     socket.on('disconnect',(info) => {
@@ -72,8 +62,6 @@ function createBingoProtocol(io){
     });
   
     socket.on('bingo',playInfo =>{
-      
-  
       pubSub.unsubscribe('new_number');  
       io.sockets.in(game.id).emit('bingo_accepted',playInfo);
       

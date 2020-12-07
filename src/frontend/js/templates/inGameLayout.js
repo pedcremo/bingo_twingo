@@ -3,7 +3,6 @@ import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';
 import * as utils from '..//utils.js'
-
 let settings = require('../../../settings')
 export const inGameLayout = (socketIO, card,otherPlayers) => {
 

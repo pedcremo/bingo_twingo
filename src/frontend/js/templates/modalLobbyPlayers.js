@@ -1,13 +1,12 @@
 import { debug, clearModal, showModal } from '../core';
 import '../../css/modalLobbyPlayers.css';
-//import * as utils from '../js/utils.js'
 import { inGameLayout } from './inGameLayout';
+import * as utils from '../utils'
 
 /*
 In this modal we show who has been connected to the online bingo game
 and what is left in seconds before playing starts
 */
-
 
 /* Players who are joining the game */
 let renderPlayersLobby = (parsedData) => {
@@ -19,22 +18,22 @@ let renderPlayersLobby = (parsedData) => {
                 <div class="lobby__card">
                     <table class='lobby__card__table'>
                         `+
-                        player.card.map((value) =>
-                            "<tr>" + value.map((val) => {
-                                if (val == null) {
-                                    return "<th class='null'></th>"
-                                } else {
-                                    return "<th>" + val + "</th>"
-                                }
-                            }).join("")
-                            + "</tr>"
-                        ).join("") +
-                    `</table>
+            player.card.map((value) =>
+                "<tr>" + value.map((val) => {
+                    if (val == null) {
+                        return "<th class='null'></th>"
+                    } else {
+                        return "<th>" + val + "</th>"
+                    }
+                }).join("")
+                + "</tr>"
+            ).join("") +
+            `</table>
                 </div>
             </li>
         `, 'text/html');
         playersDiv.appendChild(doc.body.firstChild)
-    })   
+    })
 }
 
 /* Main modal */
@@ -51,33 +50,34 @@ export const modalLobbyPlayers = (socketIO, card) => {
 
         let intervalTimer = setInterval(() => {
             let time = timer.innerText;
-            let current = (time - 1);            
+            let current = (time - 1);
             timer.innerText = current;
         }, 1000);
-        
+
         /* When a user is joined to the game socket.io even joined is triggered and we render the information in this modal */
         socket.on('joined', function (msg) {
             //The returned server message (msg) is information about players nicknames and their bingo cards
             let parsed = JSON.parse(msg);
             //We store other players cards and names to render in our browser
-            otherPlayers = parsed.players.filter((item) => item.username!=card.username)
-           
+            otherPlayers = parsed.players.filter((item) => item.username != card.username)
+
             let messagesDiv = document.getElementById("listLobbyMessages");
             //Countdown to start the game
             timer.innerText = parsed.countDown;
-            
+
             //We pass parsed msg to therender
             renderPlayersLobby(parsed)
             //Get last player joined 
             let userJoined = parsed.players[parsed.players.length - 1]
             let notif = userJoined.username + " has joined to the game"
-            
+
             messagesDiv.innerHTML = messagesDiv.innerHTML + "<li>" + notif + "</li>";
         });
         //Event notifying game starts. It's triggered by server
-        socket.on('starts_game', function (msg) {     
+        socket.on('starts_game', function (msg) {
             clearModal('gameLayout'); //remove gamelayout if exist
             clearInterval(intervalTimer);
+            utils.RemoveLang();//REMOVE THE SELECT LANG WHEN START THE  GAME
             showModal(inGameLayout(socket, card, otherPlayers));//Modal where we render online game: bombo, player card and others players cards
         });
     }
@@ -90,13 +90,13 @@ export const modalLobbyPlayers = (socketIO, card) => {
                 <div class="modal-content">
                     <h1>BINGO TWINGO</h1>
                     <p></p>
-                    <span class="time_left">Time left: <span id="time_count"></span></span>
+                    <span lass="time_left"> Time : <span id="time_count"></span></span>
                     <div class='lobby__players__list'>
                         <ol id="listLobbyPlayers"></ol>
                     </div>
                     
                     <div class='lobby__messages'>
-                        <span>Chat Messages</span>
+                    <span data-tr="Chat Messages"></span>
                         <ol id="listLobbyMessages"></ol>
                     </div>
                     

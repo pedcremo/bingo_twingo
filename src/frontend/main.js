@@ -1,7 +1,7 @@
 
 import './css/style.css';
 import './css/ingame.css';
-import { docReady, showModal, clearModal, debug } from './js/core.js';
+import { docReady, showModal, clearModal, debug} from './js/core.js';
 import { Bombo } from '../common/bombo.js';
 import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
@@ -34,7 +34,7 @@ const app = (() => {
         if (num) {
             pubSub.publish("New Number", bombo.getExtractedNumbers());
 
-        /* otherwise means bombo is running out of balls and we should finish the game */    
+            /* otherwise means bombo is running out of balls and we should finish the game */
         } else {
             stop();
         }
@@ -53,7 +53,7 @@ const app = (() => {
     /* Start bingo play */
     let start = () => {
         clearModal('bg');
-        
+
         /* Basic template where we are going to render bingo play */
         let doc = new DOMParser().parseFromString(`
             <div id="gameLayout" class="gameLayout">
@@ -78,18 +78,18 @@ const app = (() => {
         pubSub = new PubSub();
         /* Create and render empty bombo for our playing */
         bombo = new Bombo(document.getElementById('balls'));
-        
+
 
         /* Change app state from stop to run  */
         stateApp = "run";
         let pauseBtn = document.getElementById('pauseOfflineBtn');
         let blackPanel = document.getElementById('blackPanel')
-        pauseBtn.onclick = function() {                       
+        pauseBtn.onclick = function () {
             if (stateApp == "stop") {
                 blackPanel.style.display = "none"
                 pauseBtn.innerHTML = '<i class="fas fa-pause"></i>'
                 resume();
-            }else {
+            } else {
                 blackPanel.style.display = "unset"
                 pauseBtn.innerHTML = '<i class="fas fa-play"></i>'
                 stop();
@@ -98,9 +98,8 @@ const app = (() => {
         /* Subscribe app to LINIA event. When this occurs
         we show up a modal with the player awarded and a gif animation 
         obviously we stop bingo playing until modal is closed 
-        */        
+        */
         pubSub.subscribe("LINIA", (player) => {
-            debug("Linia");            
             /* Stop bingo playing */
             stop();
             /* As linia only could be awarded once per playing we delete that event
@@ -109,10 +108,9 @@ const app = (() => {
             /* Show modal */
             setTimeout(function () {
                 showModal(modalLiniaBingo(player, "linea"), function () {
-                    debug("SPEEEED");
-                    debug(speed);
+                    debug("SPEEEED", speed);
                     myApp = setInterval(getBallFromBombo, app.speed);
-                },false)
+                }, false)
             }, 50);
 
 
@@ -168,5 +166,8 @@ const app = (() => {
 })();
 /* Real entry point to our bingo app. Show modals to choose players and
  when closed start bingo playing (callback) */
- docReady(() => showModal(modalMainMenu()));
+ docReady(() => {
+    utils.setChangeLang();
+    showModal(modalMainMenu())
+ }); 
 export { app };

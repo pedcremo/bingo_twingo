@@ -7,7 +7,7 @@ import io from 'socket.io-client'
 import { modalPlayers } from './modalPlayers';
 
 export const modalMainMenu = () => {
-   
+
     const controllers = () => {
         utils.setupBackgroundVideo();
         let siteIP = location.host;//returns the hostname and port of a URL. DOM api
@@ -40,8 +40,6 @@ export const modalMainMenu = () => {
 
         // Offline Game
         document.getElementById('playOffline').onclick = function () {
-            //setup the video
-            clearModal('bg');
             showModal(modalPlayers(), app.start)
         }
     }
@@ -56,8 +54,8 @@ export const modalMainMenu = () => {
                     <input class="input_player_online" type="text" id="usernameP" name="usernameP" placeholder="Online username:">
                     <p class="msg--error" id="msg--err"></p>
                     <div class="menu__options">
-                        <button id='playOffline' class="mainMenu__btn menu__offline_btn">Start Offline Game</button>
-                        <button id='playOnline' class="mainMenu__btn menu__online_btn">Search Online Game</button>
+                    <button id='playOffline' class="mainMenu__btn menu__offline_btn" data-tr="Start Offline"></button>
+                    <button id='playOnline' class="mainMenu__btn menu__online_btn" data-tr="Online Game"></button>
                     </div>
                 </div>
             </div>`,

@@ -205,3 +205,28 @@ table.tr {
   color: rgb(202, 23, 23);
 }
 
+.lang-section{
+  position: absolute;
+  top: 60px;
+  left: 580px;
+  display: flex;
+  flex-direction: column;
+  z-index: 800; 
+/** z-index --> propiedad que especifica el orden de pila de un elemento  **/
+}
+
+.select-languages{
+  outline: none;
+  width: auto;
+  min-width: 90px;
+  text-align: center;
+  height: 30px;
+  border-radius: 6px;
+  box-sizing: border-box;
+  border-color: rgb(151, 151, 151);
+  padding: 0px 2px 0px 10px;
+  background-color: rgb(253, 253, 253);
+  color: rgb(39, 39, 39);
+  font-size: 16px;
+  font-weight: bold;
+} 

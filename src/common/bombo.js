@@ -8,11 +8,13 @@
  * And also  we extract the balls randomly using the pickNumber method
  * 
  * Let render is used to paint the balls of the bombo
+ * 
+ *  If rootElement (DOM) is not undefined means bombo is used in frontend 
  */
 
 export class Bombo{    
     
-    //If rootElement (DOM) is not undefined means bombo is used in frontend 
+
     constructor(rootElement=undefined){
         const templateBombo = Array.from({length:90},(_,i) => i + 1);
         let boles = [...templateBombo];

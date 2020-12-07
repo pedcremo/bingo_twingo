@@ -1,5 +1,6 @@
 import video from '../assets/videos/los_bingueros.mp4';
 import audio from '../assets/audios/Bingo Sound Effect.mp3';
+import {ChooseLang} from './core'
 
 /**
 * It's a function that when any player win the bingo  there is a background audio that sings bingo!!
@@ -98,6 +99,26 @@ export let renderBalls = () => {
     document.getElementById('balls').innerHTML = `${Array.from({length:90},(_,i) => i + 1).map(ball => `<div class='bingoBallEmpty' id='${ball}'>${ball}</div>`).join("")}`;
 }
 
+/**
+ * Function that contains the select options languages
+ */
+
+export let setChangeLang = () =>{
+    let langOptions = `
+        <section class="lang-section">
+            <select name="Language" id="lang" class="select-languages">
+                <option   value="en" id="btn-en" data-tr="English" data-img_src="../assets/images/en.jpg">English</option>
+                <option data-img_src="../assets/images/es.jpg"  value="es" id="btn-es" data-tr="Spanish">Spanish</option>   
+            </select>
+        </section>`;
+    let parser = new DOMParser();
+    let langEl = parser.parseFromString(langOptions, "text/html");
+    langEl = langEl.body.firstChild;
+    document.body.appendChild(langEl);
+    document.getElementById('lang').addEventListener('change', function() { ChooseLang(this.value) });
+}
+
+
 //Render card 
 export let renderCard = (extractedBalls=[],cardMatrix,player) => {
         
@@ -124,4 +145,9 @@ export let renderCard = (extractedBalls=[],cardMatrix,player) => {
               ).join("")+
          `</table>`;
     document.getElementById(player).innerHTML = out;
+}
+
+
+export let RemoveLang = () => {
+    document.getElementById('lang').remove();
 }

@@ -37,10 +37,8 @@ const gameController = (() => {
                 //Remove countDown timer. Its's nod needed because
                 //we are going to start the game
                 clearInterval(countDown);
-                //pubSub.publish("starts_game",JSON.stringify({id:currentGame.get('id'),players:currentGame.get('listPlayers'),countDown:currentGame.get('countDown')}));
                 currentGame.set('bombo',new Bombo);                
                 let bombo = currentGame.get("bombo");
-               
                 let idPlay = currentGame.get('id');
 
                 //Ball rolling function
@@ -52,8 +50,7 @@ const gameController = (() => {
                         pubSub.publish("new_number",{id:realGame.get('id'),num:num});
                     }else{
                         pubSub.publish("end_game",realGame.get('id'));
-                        //Stop throwing balls from bombo
-                        clearInterval(bomboInterval);
+                        clearInterval(bomboInterval);//Stop throwing balls from bombo
                     }
                     if (!realGame.get('bomboInterval')) {
                         realGame.set('bomboInterval',bomboInterval)
@@ -80,8 +77,7 @@ const gameController = (() => {
                 //realGame = new Map(currentGame);
                 pubSub.publish("starts_game",JSON.stringify({id:currentGame.get('id'),players:currentGame.get('listPlayers'),countDown:currentGame.get('countDown')})); 
                 gamesOnFire.set(currentGame.get('id'),new Map(currentGame))
-                //RESET currentGame
-                currentGame = new Map();
+                currentGame = new Map();//RESET currentGame
 
             }, secsUntilBegin * 1000);
 
@@ -115,4 +111,3 @@ const gameController = (() => {
 })();
 
 export {gameController};
-//module.exports = gameController();

@@ -2,9 +2,9 @@ import { debug, clearModal, showModal } from '../core';
 import { app } from '../../main.js';
 import '../../css/modalMainMenu.css';
 import * as utils from '..//utils.js'
-import { modalLobbyPlayers } from './modalLobbyPlayers.js';
 import io from 'socket.io-client'
 import { modalPlayers } from './modalPlayers';
+import { onlineMode } from '../onlineMode';
 
 export const modalMainMenu = () => {
 
@@ -12,29 +12,15 @@ export const modalMainMenu = () => {
         //setup the video
         clearModal('bg')
         utils.setupBackgroundVideo();
-        let siteIP = location.host;//returns the hostname and port of a URL. DOM api
         
         if (localStorage.getItem('onlineUsername') != '' || localStorage.getItem('onlineUsername') != undefined){
             document.getElementById('usernameP').value = localStorage.getItem('onlineUsername');
         }
        
         document.getElementById('playOnline').onclick = function () {
-            if(utils.checkName(document.getElementById('usernameP').value)){
-                localStorage.setItem('onlineUsername',document.getElementById('usernameP').value)
-                const socket = io('ws://'+siteIP, {transports: ['websocket']});
-                socket.on('connect', () => {
-                    socket.emit('join', document.getElementById('usernameP').value);                
-                });
-    
-                /* Event triggered once a user joins an 
-                * online game and get a ramdom card with unique id that 
-                * should not be shared
-                */
-                socket.on('joined_game', function (msg) {           
-                    let card = JSON.parse(msg)
-                    //Online game            
-                    showModal(modalLobbyPlayers(socket,card))
-                }); 
+            let onlineUsername = utils.checkName(document.getElementById('usernameP').value)
+            if(onlineUsername){
+                onlineMode.joinOnline(onlineUsername)
             }else{
                 document.getElementById('msg--err').innerHTML = "\u26A0  Name not allowed!"
             }

@@ -2,6 +2,8 @@ import { gameController } from './gameController'
 import { PubSub } from '../common/pubSub.js';
 //import BingoCard from '../common/bingoCard'
 import { BingoCard } from '../common/bingoCard.js';
+let settings = require('../settings.js')
+
 
 
 let linkHttpSocketServerToApp = (app) =>{
@@ -70,10 +72,12 @@ function createBingoProtocol(io){
       console.log("DISCONNECTED");
       console.log(info);
     });
+
+    socket.on('number_press',(info)=>{
+      io.sockets.in(info.playId).emit('print_numbers',info);
+    })
   
     socket.on('bingo',playInfo =>{
-      
-  
       pubSub.unsubscribe('new_number');  
       console.log("GAME INFO "+JSON.stringify(game)); 
       //console.log("bomboTimer "+game.bomboTimer);   
@@ -92,11 +96,63 @@ function createBingoProtocol(io){
       // });
     });
   
-    socket.on('linia',playInfo =>{
-      console.log("linia ->"+JSON.stringify(playInfo));
-      pubSub.publish("linea_accepted",playInfo);
-      io.sockets.in(game.id).emit('linia_accepted',playInfo);
-    });
+      //When a player sends the line the server checks it and if it is valid it sends it to the whole room.
+      socket.on('linia_bingo_check',playInfo =>{
+        //first we check that the game mode is manual
+        if(settings.manualGame){
+          let bingo = true;
+          let line_status = false;
+          let line_failed = true;
+          //scan the cardmatrix to check if the line is correct.
+          playInfo.card.cardMatrix.forEach((row) => {
+            let linia = row.filter((val) => { if (!playInfo.extractedBalls.includes(val['number']) && val['number'] != null) return val['number'] }).length;
+            if (linia > 0 && line_status==false){
+              bingo = false;
+            }else {
+              console.log("linea accepted");
+              if(!line_status && playInfo.type=='line'){
+                pubSub.publish("linea_accepted",playInfo);
+                io.sockets.in(playInfo.playId).emit('linia_accepted',playInfo);
+                line_status=true;
+              }
+              line_failed=false;
+            }  
+          })
+          if(line_failed){
+            console.log("linea failed");
+            io.sockets.in(playInfo.playId).emit('linia_failed',playInfo);
+          }
+          if (bingo && playInfo.type=='bingo') {
+            pubSub.unsubscribe('new_number'); 
+            io.sockets.in(playInfo.playId).emit('bingo_accepted',playInfo);
+            let gId=gameController.getGameById(playInfo.playId);
+            clearInterval(gId.get('bomboInterval'));
+            pubSub.publish("end_game",playInfo.playId);
+            io.sockets.in(playInfo.playId).emit('end_game',playInfo.playId);
+          }
+        }else{
+          //if the manual mode is off
+          if(playInfo.type=='bingo'){
+            pubSub.unsubscribe('new_number');  
+            console.log("GAME INFO "+JSON.stringify(game)); 
+            //console.log("bomboTimer "+game.bomboTimer);   
+            //clearInterval(game.bomboTimer);
+            console.log("bingo ->"+JSON.stringify(playInfo));
+            io.sockets.in(game.id).emit('bingo_accepted',playInfo);
+            
+            //Stop throwing balls from bombo
+            let gId=gameController.getGameById(game.id);
+            clearInterval(gId.get('bomboInterval'));
+            pubSub.publish("end_game",game.id);
+            io.sockets.in(game.id).emit('end_game',game.id);
+          }else{
+            console.log("linia ->"+JSON.stringify(playInfo));
+            pubSub.publish("linea_accepted",playInfo);
+            io.sockets.in(game.id).emit('linia_accepted',playInfo);
+          }
+        }
+
+      });
     
     });
 }

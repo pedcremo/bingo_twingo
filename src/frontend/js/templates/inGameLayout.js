@@ -40,7 +40,6 @@ let renderCard = (extractedBalls=[],cardMatrix,player) => {
 
 //Render card manual using new matrix
 let renderCardManual = (extractedBalls=[],cardMatrix,player) => {
-        
     let out =`<h1>Player ${player}</h1>
          <table class='bingoCard'>
             
@@ -50,7 +49,7 @@ let renderCardManual = (extractedBalls=[],cardMatrix,player) => {
                    if (val['number']==null){
                         return "<th class='nulo'></th>"
                    }else{
-                        return "<th id='"+player+"_cardNum_"+val['number']+"' class='number'>"+val['number']+"</th>"
+                        return "<th id='"+player+"_cardNum_"+val['number']+"' class='number_"+player+"'>"+val['number']+"</th>"
                    }}).join("")
               +"</tr>"                          
               ).join("")+
@@ -60,7 +59,6 @@ let renderCardManual = (extractedBalls=[],cardMatrix,player) => {
 }
 
 let updateMatrix = (cardMatrix) =>{
-    console.log(cardMatrix);
     for (let i = 0; i < cardMatrix.length; i++) {
         for (let r = 0; r < cardMatrix[i].length; r++) {
             if(cardMatrix[i][r]==null){
@@ -75,6 +73,19 @@ let updateMatrix = (cardMatrix) =>{
                 }   
             }
 
+        }
+    }
+}
+
+//sete card matrix to default
+let resetCard = (cardMatrix) =>{
+    for (let i = 0; i < cardMatrix.length; i++) {
+        for (let r = 0; r < cardMatrix[i].length; r++) {
+            if(cardMatrix[i][r]['number']==null){
+                cardMatrix[i][r]['active']=true;
+            }else{
+                cardMatrix[i][r]['active']=false;
+            }
         }
     }
 }
@@ -101,27 +112,28 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         document.getElementById('bingoCards').appendChild(divRoot);
 
         //function to laod clicks of the card
-        let loadmanualClicks = () =>{
-            let numbers = document.getElementsByClassName("number");
+        let loadmanualClicks = (card) =>{
+            let numbers = document.getElementsByClassName("number_"+card.username);
             for (let i = 0; i < numbers.length; i++) {
                 numbers[i].addEventListener('click', function(){
                     //get number from id with split
                     let number = this['id'].split('_',4)[2]
-                    console.log(number);
-                    //change class
-                    this.className = this.className.includes("extracted") ? "number" : "number extracted";
                     //change active on cardmatrix to true or false. (to check later)
                     card.cardMatrix.forEach((row)=>{
                         for (let i = 0; i < row.length; i++) {
                             //search number clicked
                             if(row[i]['number']==number){
-                                row[i]['active']= this.className.includes("extracted") ? true : false;
+                                //If it is active in the card matrix it is set to false, if not it is set to true
+                                row[i]['active']= row[i]['active']==true ? false : true;
                             }
                         }
                         
                     })
+                    //When any player presses a number, it is sent to the server and the server emits to the room.
+                    socket.emit('number_press', { 'playId': card.gameID, 'card': card, 'number':number })
+                    //check bingo/linea
                     sendManualBingo(card,line_status)
-                })
+                },true)
             }
         }
 
@@ -140,6 +152,14 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
                 }
             });
         }
+        //Receive the emit that some player has pressed a number and mark it
+        socket.on('print_numbers', (info)=>{
+            console.log(info);
+            let idnumber = document.getElementById(info.card.username+"_cardNum_"+info.number)
+            console.log(info.card.username+"_cardNum_"+info.number);
+            idnumber.className = idnumber.className.includes("extracted") ? "number" : "number extracted";
+        })
+
         //Render bombo
         renderBalls();
         //Every time server picks upn a ball from bombo this event is broadcasted to all online players
@@ -168,9 +188,6 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         
         //Check bingo or linia on a card
         let checkBingo = (card, extractedBalls,line_status) => {
-            console.log("CHECKBINGO");
-            console.log(line_status);
-            console.log(extractedBalls.length);
             let bingo = true;
             card.cardMatrix.forEach((row) => {
                 let linia = row.filter((val) => { if (!extractedBalls.includes(val) && val != null) return val }).length;
@@ -179,14 +196,14 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
                   if (line_status == false) {
                      line_status = true;
                      //Inform server we have linia   
-                     socket.emit('linia', { playId: card.gameID, card: card })
+                     socket.emit('linia_bingo_check', { playId: card.gameID, card: card, "type":"line" })
                   }
                }
             })
         
             if (bingo && bingo_status == false) {
                //Inform server we have bingo
-               socket.emit('bingo', { playId: card.gameID, card: card })
+               socket.emit('linia_bingo_check', { playId: card.gameID, card: card,"type":"bingo" })
             }
          }
 
@@ -204,16 +221,23 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
                 })
                 if(linia){
                     if(!line_status){
-                        console.log("ENVIADA LINEA AL SERVIDOR");
-                        socket.emit('linia', { 'playId': card.gameID, 'card': card, 'extractedBalls': extractedBalls })
+                        socket.emit('linia_bingo_check', { 'playId': card.gameID, 'card': card, 'extractedBalls': extractedBalls,'type':'line'})
                     }
                     contlinia++;
                     if(contlinia>=3){
-                        console.log("ENVIADO BINGO AL SERVIDOR");
+                        socket.emit('linia_bingo_check', { 'playId': card.gameID, 'card': card, 'extractedBalls': extractedBalls, 'type':'bingo'})
                     }
                 }
             })
          }
+
+        //This function resets the card and the clicks when a player has called a bad line
+        socket.on('linia_failed', function (data) {
+            resetCard(data.card.cardMatrix)
+            renderCardManual(extractedBalls,data.card.cardMatrix,data.card.username);
+            loadmanualClicks(data.card)
+        });
+         
 
         //check if gamemode is manual or no
         //LOADER
@@ -221,7 +245,7 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             updateMatrix(card.cardMatrix);
             renderCardManual(extractedBalls,card.cardMatrix,card.username);
             //load the clicks of all the numbers (only local player)
-            loadmanualClicks();
+            loadmanualClicks(card);
             loadOtherplayercards(otherPlayers);
         }else{
             renderCard(extractedBalls,card.cardMatrix,card.username);
@@ -242,7 +266,8 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             bingo_status = true;
         });
         //Server broadcast all gamers linia claim has been accepted
-        socket.on('linia_accepted', function (msg) {            
+        socket.on('linia_accepted', function (msg) {    
+            console.log("LINEA ACCEPTED");        
             let username = msg.card.username;
             showModal(modalLiniaBingo(username, "linea"),null,false)
             //In the time set for the variable (by default 3 seconds) the modal is destroyed.

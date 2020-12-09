@@ -21,6 +21,7 @@ const onlineMode = (() => {
     // Game
     let card;
     let extractedBalls = [];
+    let checkedBalls = [];
     let renderCard;
     let bingo_status = false;
     let line_status = false;
@@ -49,13 +50,12 @@ const onlineMode = (() => {
 
     /* GAME EVENTS */
 
-    let setGameLayout = (render) =>{
+    let setGameLayout = (render) => {
         renderCard = render
     }
 
     //Check bingo or linia on a card
     let checkBingo = (card, extractedBalls, line_status) => {
-        console.log(extractedBalls.length);
         let bingo = true;
         card.cardMatrix.forEach((row) => {
             let linia = row.filter((val) => { if (!extractedBalls.includes(val) && val != null) return val }).length;
@@ -77,7 +77,7 @@ const onlineMode = (() => {
                 card: card,
             }
             //Inform server we have bingo
-            onlineMode.emitLine(card)
+            onlineMode.emitBingo(card)
         }
     }
 
@@ -87,6 +87,21 @@ const onlineMode = (() => {
 
     let emitBingo = (card) => {
         socket.emit('bingo', { playId: card.gameID, card: card })
+    }
+
+    let checkBall = (ball) => {
+        let number = parseInt(ball.innerHTML);
+        if (!checkedBalls.includes(number)) {
+            checkedBalls.push(parseInt(number))
+            ball.classList.add('extracted')
+        } else {
+            checkedBalls.splice(checkedBalls.indexOf(number), 1)
+            ball.classList.remove('extracted')
+        }
+    }
+
+    let checkBingoCard = () => {
+        checkBingo(card, extractedBalls, line_status);
     }
 
 
@@ -99,8 +114,6 @@ const onlineMode = (() => {
         * should not be shared
         */
         socket.on('joined_game', function (msg) {
-            console.log("joined_game");
-
             let recivedCard = JSON.parse(msg)
             card = recivedCard
             //Online game            
@@ -109,7 +122,6 @@ const onlineMode = (() => {
 
         /* When a user is joined to the game socket.io even joined is triggered and we render the information in this modal */
         socket.on('joined', function (msg) {
-            console.log("joined");
             //The returned server message (msg) is information about players nicknames and their bingo cards
             let parsed = JSON.parse(msg);
             //We store other players cards and names to render in our browser
@@ -120,8 +132,6 @@ const onlineMode = (() => {
             timerElement.innerText = parsed.countDown;
 
             //We pass parsed msg to therender
-            console.log("===PARSED===");
-            console.log(parsed);
             renderPlayersLobby(parsed)
             //Get last player joined 
             let userJoined = parsed.players[parsed.players.length - 1]
@@ -135,25 +145,23 @@ const onlineMode = (() => {
             let div_bg = document.getElementById('div_bg');
             clearInterval(intervalTimer);
             //Modal where we render online game: bombo, player card and others players cards            
-            showModal(inGameLayout(socket, card, otherPlayers));
+            showModal(inGameLayout(card, otherPlayers));
         });
 
         //Every time server picks upn a ball from bombo this event is broadcasted to all online players
         //joined on same game (room)
         socket.on('new_number', function (msg) {
-            console.log("===NEW NUMBER====");
-            console.log(msg.num)
             //Add new ball to array with already extracted balls     
             extractedBalls.push(msg.num)
             //Render player card to reflect any change maybe msg.num is in the card and we need to mark it
-            renderCard(extractedBalls, card.cardMatrix, card.username);
+            renderCard(checkedBalls, card.cardMatrix, card.username);
 
             //Render others players cards too 
             otherPlayers.forEach((otherPlayer) =>
-                renderCard(extractedBalls, otherPlayer.card, otherPlayer.username)
+                renderCard(checkedBalls, otherPlayer.card, otherPlayer.username)
             );
             //Check if player card is in 'linia' or bingo state
-            checkBingo(card, extractedBalls, line_status);
+            // checkBingo(card, checkedBalls, line_status);
             if (lastBall) {
                 document.getElementById(lastBall).className = 'bingoBall';
             }
@@ -193,8 +201,10 @@ const onlineMode = (() => {
     return {
         joinOnline: joinOnline,
         setModalLobby: setModalLobby,
+        checkBall: checkBall,
         emitLine: emitLine,
         emitBingo: emitBingo,
+        checkBingoCard: checkBingoCard,
         setGameLayout: setGameLayout
     }
 

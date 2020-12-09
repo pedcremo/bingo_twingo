@@ -11,8 +11,9 @@ let renderBalls = () => {
 let renderCard = (extractedBalls = [], cardMatrix, player) => {
 
     let out = `<h1>Player ${player}</h1>
+        <button id="bingoButton" type="button"> Line / Bingo!</button>
          <table class='bingoCard'>
-            
+
              `+
         cardMatrix.map((value) =>
             "<tr>" + value.map((val) => {
@@ -20,23 +21,30 @@ let renderCard = (extractedBalls = [], cardMatrix, player) => {
                     return "<th class='nulo'></th>"
                 } else {
                     if (extractedBalls && extractedBalls.indexOf(val) >= 0) {
-                        if (val === extractedBalls[extractedBalls.length - 1]) {
-                            return "<th class='extracted blink'>" + val + "</th>";
-                        } else {
-                            return "<th class='extracted'>" + val + "</th>";
-                        }
+                        return "<th class='ballValue extracted'>" + val + "</th>";
                     } else {
-                        return "<th>" + val + "</th>"
+                        return "<th class='ballValue'>" + val + "</th>"
                     }
                 }
             }).join("")
             + "</tr>"
         ).join("") +
         `</table>`;
+
     document.getElementById(player).innerHTML = out;
+
+
+    let balls = document.getElementsByClassName('ballValue')
+    Array.from(balls).forEach((val) => {
+        val.addEventListener('click', () => onlineMode.checkBall(val))
+    })
+
+    document.getElementById('bingoButton').addEventListener('click', () => onlineMode.checkBingoCard())
+
 }
 
 export const inGameLayout = (card, otherPlayers) => {
+
 
     const controllers = () => {
 

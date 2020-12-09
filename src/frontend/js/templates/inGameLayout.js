@@ -3,15 +3,14 @@ import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';
 import { settings } from '../../../settings';
+import { checkBingo } from '../../../common/checkBingo.js'
 
 //Render bingo bombo
 let renderBalls = () => {
     document.getElementById('balls').innerHTML = `${Array.from({length:90},(_,i) => i + 1).map(ball => `<div class='bingoBallEmpty' id='${ball}'>${ball}</div>`).join("")}`;
 }
 
-//Render card 
-let renderCard = (extractedBalls=[],cardMatrix,player) => {
-        
+let renderCard = (extractedBalls=[], cardMatrix, player, pickedNums = undefined) => {       
     let out =`<h1>Player ${player}</h1>
         <div class="playerCard">
             <table class='bing0Card playerCard__table'> `+
@@ -20,6 +19,7 @@ let renderCard = (extractedBalls=[],cardMatrix,player) => {
                     if (val==null){
                             return "<th class='nulo'></th>"
                     }else{
+                        if (pickedNums == undefined){
                             if (extractedBalls && extractedBalls.indexOf(val) >= 0){
                                 if (val===extractedBalls[extractedBalls.length-1]){
                                     return "<th class='cardNum extracted blink'>"+val+"</th>";                                  
@@ -29,40 +29,47 @@ let renderCard = (extractedBalls=[],cardMatrix,player) => {
                             }else{
                                 return "<th class='cardNum'>"+val+"</th>"
                             }
+                        } else {                            
+                            if (pickedNums.includes(val)){
+                                return "<th class='cardNum extracted'>"+val+"</th>";  
+                            }else{
+                                return "<th class='cardNum'>"+val+"</th>"
+                            }
+                        }
                     }}).join("")
                 +"</tr>"                          
                 ).join("")+
             `</table>
-        </div>
+        </div> 
         <div class="cardOptions">
             <button id="claimLine" class"line-btn">Line!</button>
             <button id="claimBingo" class"bingo-btn">Bingo!</button>
-        </div>`;
+        </div>`
     document.getElementById(player).innerHTML = out;
 }
 
 export const inGameLayout = (socketIO, card,otherPlayers) => {
 
     const controllers = () => {       
-       
         let socket = socketIO;
         let line_status = false;
         let bingo_status = false;
         let extractedBalls = [];
         let lastBall;
         let secsModalLinea = settings.secsLineaWait;
-        let pickedNums = [];
+        card.pickedNums = []
 
+        // Mark number in the card and send it to the server.
         let markNumber = (el) => {
             let num = Number(el.innerHTML);
-            if (!pickedNums.includes(num)){
-                pickedNums.push(num);
+            if (!card.pickedNums.includes(num)){
+                card.pickedNums.push(num);
                 el.classList = 'extracted';
             } else {
-                pickedNums = pickedNums.filter((el) => { return  el != num })
+                card.pickedNums = card.pickedNums.filter((el) => { return  el != num })
                 el.classList = 'cardNum';
-            } 
-            console.log(pickedNums);
+            }
+            socket.emit('mark_number', { num: num, username: card.username });
         }
         
         //Create a div to contain player online bingo card. Id == username
@@ -91,90 +98,67 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
 
         //Every time server picks upn a ball from bombo this event is broadcasted to all online players joined on same game (room)
         socket.on('new_number', function (msg) {       
-            //Add new ball to array with already extracted balls     
-            extractedBalls.push(msg.num)
-            //Render player card to reflect any change maybe msg.num is in the card and we need to mark it
-            // renderCard(extractedBalls,card.cardMatrix,card.username);
-            
-            //Render others players cards too 
-            otherPlayers.forEach((otherPlayer) =>
-                renderCard(extractedBalls,otherPlayer.card,otherPlayer.username)
-            );
-            //Check if player card is in 'linia' or bingo state
-            // checkBingo(card,extractedBalls,line_status);   
-            if(lastBall){
-                document.getElementById(lastBall).className = 'bingoBall';
+            extractedBalls.push(msg.num) //Add new ball to array with already extracted balls     
+            //Render others players cards too (ONLY ON "AUTOMATIC MODE")
+            if (settings.onlineMode == 'auto') {
+                renderCard(extractedBalls,card.cardMatrix,card.username);
+                otherPlayers.forEach((otherPlayer) => renderCard(extractedBalls,otherPlayer.card,otherPlayer.username) );
+                let check = checkBingo(card,extractedBalls,line_status);
+                if ( check.linea ) socket.emit('linia', { playId: card.gameID, card: card })
+                if ( check.bingo ) socket.emit('bingo', { playId: card.gameID, card: card })
             }
-            //a la bola actual le ponemos la animacion
+            if ( lastBall ) { document.getElementById(lastBall).className = 'bingoBall' }
+            // We put the animation on the current ball
             document.getElementById(msg.num).className = 'bingoBall blink'
-
             lastBall = msg.num;
         });
+        if (settings.onlineMode == 'manual'){
+            document.getElementById('claimLine').onclick = () => { if (!line_status) socket.emit('linia', { playId: card.gameID, card: card })};
+            document.getElementById('claimBingo').onclick = () => { if (!bingo_status) socket.emit('bingo', { playId: card.gameID, card: card }) };
+
+            // render other players cards when someone marks a number
+            socket.on('marked_number', (msg) => {
+                otherPlayers.map((player) => {
+                    if (msg.username == player.username){
+                        if (player.pickedNums.includes(msg.num)) {
+                            player.pickedNums = player.pickedNums.filter((num) => num != msg.num)
+                        }else{
+                            player.pickedNums.push(msg.num);
+                        }
+                        renderCard(extractedBalls, player.card, player.username, player.pickedNums)
+                    } 
+                }); 
+            });
+        }
         
-        //Check bingo or linia on a card
-        let checkBingo = (card, extractedBalls,line_status) => {
-            let bingo = true;
-            card.cardMatrix.forEach((row) => {
-                let linia = row.filter((val) => { if (!extractedBalls.includes(val) && val != null) return val }).length;
-                if (linia > 0) bingo = false;
-                else {
-                  if (line_status == false) {
-                     line_status = true;
-                     //Inform server we have linia   
-                     socket.emit('linia', { playId: card.gameID, card: card })
-                  }
-               }
-            })
-        
-            if (bingo && bingo_status == false) {
-            
-               let send = {
-                    game_id: card.gameID,
-                    nickname: card.username,
-                    card: card,
-               }
-               //Inform server we have bingo
-               socket.emit('bingo', { playId: card.gameID, card: card })
-            }
-         }
         
         //Server broadcast all gamers game is over
-        socket.on('end_game', function (msg) {
-            console.log(msg);
-        });
+        socket.on('end_game', (msg) => console.log(msg));
+
         //Server broadcast all gamers bingo claim has been accepted
         socket.on('bingo_accepted', function (msg) {
-            let username = msg.card.username;
-            showModal(modalLiniaBingo(username, "bingo"),function() {
-                showModal(modalMainMenu());
-            },false)
-            socket.disconnect();
             bingo_status = true;
+            showModal(modalLiniaBingo(msg.card.username, "bingo"), () => showModal(modalMainMenu()), false)
+            socket.disconnect();  
         });
+
         //Server broadcast all gamers linia claim has been accepted
-        socket.on('linia_accepted', function (msg) {            
-            let username = msg.card.username;
-            showModal(modalLiniaBingo(username, "linea"),null,false)
-            //In the time set for the variable (by default 3 seconds) the modal is destroyed.
-            setTimeout(() => {
-                clearModal('modal')
-            }, secsModalLinea * 1000);
-            line_status = true;
+        socket.on('linia_accepted', function (msg) {     
+            line_status = true;       
+            showModal(modalLiniaBingo(msg.card.username, "linea"),null,false)
+            //In the time set for the variable the modal is destroyed.
+            setTimeout(() => clearModal('modal'), secsModalLinea * 1000);  
         });
     }
 
     return {
         template:
-            `
-            <div class="gameLayout">
-                <div id="bingoCards" class="cards">
-                
-                </div>
+            `<div class="gameLayout">
+                <div id="bingoCards" class="cards"></div>
                 <div class="panel">
                     <div id="balls" class="balls__grid"></div>
                 </div>
-            </div>
-            `,
+            </div>`,
         controllers: controllers
     }
 }

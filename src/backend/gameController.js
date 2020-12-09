@@ -65,7 +65,6 @@ const gameController = (() => {
                 pubSub.subscribe("linea_accepted", (data) => {
                     //clear Interval
                     clearInterval(bomboInterval);
-
                     //In 3.5 seconds we call the ballRolling function again (I have put 500ms more than in the frontend to avoid any bug)
                     setTimeout(() => {
                         bomboInterval = setInterval(ballRolling,speedBalls * 1000)

@@ -2,6 +2,7 @@ import { gameController } from './gameController'
 import { PubSub } from '../common/pubSub.js';
 //import BingoCard from '../common/bingoCard'
 import { BingoCard } from '../common/bingoCard.js';
+import { checkBingo } from '../common/checkBingo.js'
 
 
 let linkHttpSocketServerToApp = (app) =>{
@@ -30,7 +31,8 @@ function createBingoProtocol(io){
       //Should be provided to other jooined players
       let card_hidden = {
         username: playerName,
-        card:bingoCard.getMatrix()
+        card: bingoCard.getMatrix(),
+        pickedNums: []
       }
      
       game=gameController.getCurrentGame(card_hidden,pubSub);
@@ -59,20 +61,36 @@ function createBingoProtocol(io){
     });
   
     socket.on('disconnect',(info) => console.log("DISCONNECTED "+info) );
-  
+
+    // When someone marks a number in the card, we send it to every players in the room
+    
+    socket.on('mark_number',msg => io.sockets.in(game.id).emit('marked_number',msg) );
+
+    // When someone clicks on bingo, we check if the bingo it's correct and we send it to every players.
     socket.on('bingo',playInfo =>{
-      pubSub.unsubscribe('new_number');
-      io.sockets.in(game.id).emit('bingo_accepted',playInfo);
-      //Stop throwing balls from bombo
-      let gId=gameController.getGameById(game.id);
-      clearInterval(gId.get('bomboInterval'));
-      pubSub.publish("end_game",game.id);
-      io.sockets.in(game.id).emit('end_game',game.id);
+      let gId = gameController.getGameById(playInfo.playId);
+      let bombo = gId.get('bombo')
+      // checkBingo is a common function (can be used in frontend or backend)
+      let check = checkBingo(playInfo.card,bombo.getExtractedNumbers(), true);
+      if ( check.bingo ) {
+        pubSub.unsubscribe('new_number');
+        pubSub.publish("end_game",game.id);
+        io.sockets.in(game.id).emit('bingo_accepted',playInfo);
+        clearInterval(gId.get('bomboInterval'));
+        io.sockets.in(game.id).emit('end_game',game.id);
+      }
     });
   
+    // When someone clicks on line, we check if the line it's correct and we send it to every players, then 
+    // any user will be able to send their line.
     socket.on('linia',playInfo =>{
-      pubSub.publish("linea_accepted",playInfo);
-      io.sockets.in(game.id).emit('linia_accepted',playInfo);
+      let gId = gameController.getGameById(playInfo.playId);
+      let bombo = gId.get('bombo')
+      let check = checkBingo(playInfo.card,bombo.getExtractedNumbers());
+      if ( check.linea ) {
+        pubSub.publish("linea_accepted",playInfo);
+        io.sockets.in(game.id).emit('linia_accepted',playInfo);
+      }
     });
     
     });

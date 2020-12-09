@@ -1,12 +1,6 @@
 import '../../css/modalLobbyPlayers.css';
 import { onlineMode } from '../onlineMode';
 
-/*
-In this modal we show who has been connected to the online bingo game
-and what is left in seconds before playing starts
-*/
-
-
 /* Players who are joining the game */
 let renderPlayersLobby = (parsedData) => {
     console.log("rendering");

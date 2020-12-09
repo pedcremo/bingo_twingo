@@ -45,7 +45,6 @@ let renderCard = (extractedBalls = [], cardMatrix, player) => {
 
 export const inGameLayout = (card, otherPlayers) => {
 
-
     const controllers = () => {
 
         onlineMode.setGameLayout(renderCard)

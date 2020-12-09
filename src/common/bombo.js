@@ -11,8 +11,6 @@
  */
 
 export class Bombo{    
-    
-    //If rootElement (DOM) is not undefined means bombo is used in frontend 
     constructor(rootElement=undefined){
         const templateBombo = Array.from({length:90},(_,i) => i + 1);
         let boles = [...templateBombo];
@@ -21,6 +19,13 @@ export class Bombo{
         let shuffle = () => boles.sort((a,b) => Math.random()-0.5);         
         this.getExtractedNumbers= () =>  bolesExtracted;
         this.getRemainingBoles = () => boles;
+        this.lightBall = (ball) => {
+            if(lastBall){
+                document.getElementById(lastBall).className = 'bingoBall';
+            }
+            document.getElementById(ball).className = 'bingoBall blink'
+            lastBall = ball;
+        }
         this.pickNumber = () => {
             shuffle();             
             boles[0] && bolesExtracted.push(boles[0]);  

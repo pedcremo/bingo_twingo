@@ -154,7 +154,7 @@ export const modalPlayers = () => {
                 m.style.display = "none";
                 div_bg.remove();
                 app.speed = (parseFloat(inputVal.value) * 1000); //SET GAME SPEED
-                app.start();
+                app.offline();
             } else {
                 document.getElementById('msg--err').innerHTML = "\u26A0  Add some players first!"
             }

@@ -42,7 +42,7 @@ function createBingoProtocol(io){
       socket.join(game.id);
       card.gameID = game.id;
       //SEND TO JOINED USER THE CARD WITH ID AND CHECKSUM
-      io.to(socket.id).emit('joined_game', JSON.stringify(card));
+      io.to(socket.id).emit('joined_game', JSON.stringify({card: card, game: game}));
   
       //SEND TO EVERY PLAYER IN THE GAME THAT NEW PLAYER HAS JOINED, AND ONLY THE CARDMATRIX and USERNAME
       io.sockets.in(game.id).emit('joined',JSON.stringify(game));

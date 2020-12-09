@@ -115,11 +115,36 @@ const gameController = (() => {
         }
         return {id:currentGame.get('id'),players:currentGame.get('listPlayers'),countDown:currentGame.get('countDown'),bomboCongo:bomboInterval}
 
-    } 
+    }
+
+    /**
+     * Function checkBingo 
+     * which we use to know when the line has gone out and bingo 
+     * to post it with the post pattern so that we can only sing line and bingo once per game.
+     * @param {*} cardMatrix 
+     * @param {*} extractedBalls 
+     * @param {*} pubSub 
+     * @param {*} player 
+     */
+
+    let checkBingo = (cardMatrix, extractedBalls, pubSub, player) => {
+        let bingo = true;
+        cardMatrix.forEach((row) => {
+            row.filter((val) => { if (extractedBalls.indexOf(val) <= 0) return val }).length
+            if (linia > 0) bingo = false;
+            else pubSub.publish("LINIA", player.name);
+        })
+
+        if (bingo) {
+            pubSub.publish("BINGO", player.name)
+        }
+    }
 
     let getGameById =(gameID) => gamesOnFire.get(gameID);
     
-    return {getCurrentGame: getCurrentGame,
+    return {
+            checkBingo: checkBingo,
+            getCurrentGame: getCurrentGame,
             getGameById: getGameById}
 })();
 

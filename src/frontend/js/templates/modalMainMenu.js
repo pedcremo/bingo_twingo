@@ -1,9 +1,7 @@
-import { debug, clearModal, showModal } from '../core';
+import { clearModal, showModal } from '../core';
 import { app } from '../../main.js';
 import '../../css/modalMainMenu.css';
 import * as utils from '..//utils.js'
-import { modalLobbyPlayers } from './modalLobbyPlayers.js';
-import io from 'socket.io-client'
 import { modalPlayers } from './modalPlayers';
 
 export const modalMainMenu = () => {
@@ -22,20 +20,6 @@ export const modalMainMenu = () => {
             if(utils.checkName(document.getElementById('usernameP').value)){
                 localStorage.setItem('onlineUsername',document.getElementById('usernameP').value);
                 app.online();
-                // const socket = io('ws://'+siteIP, {transports: ['websocket']});
-                // socket.on('connect', () => {
-                //     socket.emit('join', document.getElementById('usernameP').value);                
-                // });
-    
-                // /* Event triggered once a user joins an 
-                // * online game and get a ramdom card with unique id that 
-                // * should not be shared
-                // */
-                // socket.on('joined_game', function (msg) {           
-                //     let card = JSON.parse(msg)
-                //     //Online game            
-                //     showModal(modalLobbyPlayers(socket,card))
-                // }); 
             }else{
                 document.getElementById('msg--err').innerHTML = "\u26A0  Name not allowed!"
             }

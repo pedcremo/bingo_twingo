@@ -1,10 +1,5 @@
 import { Bombo } from '../common/bombo.js';
-//let  bingoCard = require('../common/bingoCard.js');
-import { bingoCard } from '../common/bingoCard.js';
-import { PubSub } from '../common/pubSub.js';
-//const PubSub = require('../common/pubSub.js');
 let settings = require('../settings.js')
-// import { settings } from "../utils/settings.js";
 
 //CLOSURE
 const gameController = (() => {   

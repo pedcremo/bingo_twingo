@@ -8,6 +8,7 @@ import { setupAudioBingoWin } from './js/templates/modalPlayers.js';
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
 import { settings } from '../settings';
+import { Router } from './js/router';
 
 /**
  * Within the app constant(closure), we have defined several variables with anonymous functions which are responsible for starting and stopping the game
@@ -165,6 +166,7 @@ const app = (() => {
 })();
 /* Real entry point to our bingo app. Show modals to choose players and
  when closed start bingo playing (callback) */
-docReady(() => showModal(modalMainMenu()));
+// docReady(() => showModal(modalMainMenu()));
+docReady(() => new Router());
 
 export { app };

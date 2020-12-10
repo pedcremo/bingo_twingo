@@ -46,7 +46,7 @@ let cacheModal;
  * @param {*} callback 
  */
 let showModal = (templateHtml, callback, close = true) => {
-    let template = templateHtml
+    let template = templateHtml;
     if (templateHtml.template) template = templateHtml.template;
     let parser = new DOMParser();
     let modal = parser.parseFromString(template, "text/html");
@@ -88,7 +88,6 @@ let showModal = (templateHtml, callback, close = true) => {
         }
         //Very Important.Apply controler over template defined in the same template file
     if (templateHtml.controllers) templateHtml.controllers();
-
 }
 
 /**

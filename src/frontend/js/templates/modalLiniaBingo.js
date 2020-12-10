@@ -21,11 +21,11 @@ imgsLinea.push(linea1,linea2,linea3);
 /**
  * These functions return a random gif from which we have imported
  */
-let randomBingo = () =>{
+function randomBingo(){
     let img=imgsBingo[Math.round(Math.random() * ((imgsBingo.length-1) - 0) + 0  )];
     return img;
 }
-let randomLinea = () =>{
+function randomLinea(){
     let img=imgsLinea[Math.round(Math.random() * ((imgsLinea.length-1) - 0) + 0  )];
     return img;
 }

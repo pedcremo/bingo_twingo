@@ -4,7 +4,6 @@ import '../../css/modalMainMenu.css';
 import * as utils from '../utils.js'
 import { modalLobbyPlayers } from './modalLobbyPlayers.js';
 import io from 'socket.io-client'
-import { modalPlayers } from './modalPlayers';
 
 export const modalMainMenu = () => {
 
@@ -37,11 +36,6 @@ export const modalMainMenu = () => {
                 document.getElementById('msg--err').innerHTML = "\u26A0  Name not allowed!"
             }
         }
-
-        // Offline Game
-        document.getElementById('playOffline').onclick = function () {
-            showModal(modalPlayers(), app.start)
-        }
     }
 
     return {
@@ -54,7 +48,6 @@ export const modalMainMenu = () => {
                     <input class="input_player_online" type="text" id="usernameP" name="usernameP" placeholder="Online username:">
                     <p class="msg--error" id="msg--err"></p>
                     <div class="menu__options">
-                    <button id='playOffline' class="mainMenu__btn menu__offline_btn" data-tr="Start Offline"></button>
                     <button id='playOnline' class="mainMenu__btn menu__online_btn" data-tr="Online Game"></button>
                     </div>
                 </div>

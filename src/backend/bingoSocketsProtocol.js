@@ -56,10 +56,7 @@ function createBingoProtocol(io){
       });
     });
   
-    socket.on('disconnect',(info) => {
-      console.log("DISCONNECTED");
-      console.log(info);
-    });
+    socket.on('disconnect',(info) => { console.log("DISCONNECTED  " + info)});
   
     socket.on('bingo',playInfo =>{
       pubSub.unsubscribe('new_number');  

@@ -2,8 +2,9 @@ import { debug, clearModal, showModal } from '../core';
 import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';
-import * as utils from '..//utils.js'
+import * as utils from '../utils.js'
 let settings = require('../../../settings')
+
 export const inGameLayout = (socketIO, card,otherPlayers) => {
 
     const controllers = () => {       
@@ -15,7 +16,6 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         let lastBall;
         let secsModalLinea = settings.secsLineaWait;
         clearModal('bg');
-        
         //Create a div to contain player online bingo card. Id == username
         let divRoot = document.createElement('div');
         divRoot.classList.add('bingoCardLayout');
@@ -80,13 +80,13 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
          }
         
         //Server broadcast all gamers game is over
-        socket.on('end_game', function (msg) {
-        });
+        socket.on('end_game', (msg) => console.log(msg));
+
         //Server broadcast all gamers bingo claim has been accepted
         socket.on('bingo_accepted', function (msg) {
             let username = msg.card.username;
             showModal(modalLiniaBingo(username, "bingo"),function() {
-                showModal(modalMainMenu());
+                showModal(modalMainMenu() , utils.setChangeLang());
             },false)
             socket.disconnect();
             bingo_status = true;

@@ -1,26 +1,6 @@
 import video from '../assets/videos/los_bingueros.mp4';
-import audio from '../assets/audios/Bingo Sound Effect.mp3';
 import {ChooseLang} from './core'
 
-/**
-* It's a function that when any player win the bingo  there is a background audio that sings bingo!!
-* This function I'll  imported it into index and called it in  pubSub.subscribe("BINGO")
-*/
-export function setupAudioBingoWin() {
-    let audioBackground = `
-        <div id="sound">
-            <audio controls autoplay loop id="bingoSound">
-                  <source src="${audio}" type="audio/mpeg">
-             </audio>
-        </div>
-        `;
-    let parser = new DOMParser();
-    let bingoAudio = parser.parseFromString(audioBackground, "text/html");
-
-    bingoAudio = bingoAudio.body.firstChild;
-    bingoAudio.currentTime = Math.round(Math.random() * 10);
-    document.body.appendChild(bingoAudio);
-}
 
 /**
  * Set the backgroundVideo 

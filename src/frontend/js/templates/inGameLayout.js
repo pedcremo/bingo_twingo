@@ -40,11 +40,14 @@ let renderCard = (extractedBalls=[], cardMatrix, player, pickedNums = undefined)
                 +"</tr>"                          
                 ).join("")+
             `</table>
-        </div> 
-        <div class="cardOptions">
+        </div>
+        ${
+            (settings.onlineMode == 'manual') ? `<div class="cardOptions">
             <button id="claimLine" class"line-btn">Line!</button>
             <button id="claimBingo" class"bingo-btn">Bingo!</button>
-        </div>`
+        </div>`:''
+        }
+        `
     document.getElementById(player).innerHTML = out;
 }
 

@@ -15,7 +15,7 @@ let renderPlayersLobby = (parsedData) => {
     playersDiv.innerHTML = '';
     parsedData.players.map((player) => {
         let doc = new DOMParser().parseFromString(`
-            <li> Player: ${player.username} &nbsp; - &nbsp; Lv: 8 &nbsp; - &nbsp; Wins : 0
+            <li> Player: ${player.username} &nbsp;
                 <div class="lobby__card">
                     <table class='lobby__card__table'>
                         `+

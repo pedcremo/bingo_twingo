@@ -4,6 +4,7 @@ import '../../css/modalMainMenu.css';
 import * as utils from '..//utils.js'
 import { modalPlayers } from './modalPlayers';
 import settings from '../../../settings';
+import { translator } from '../translator';
 
 export const modalMainMenu = () => {
 
@@ -44,11 +45,11 @@ export const modalMainMenu = () => {
                 <div class="modal-content">
                     <h1>BINGO TWINGO</h1>
                     <p></p>
-                    <input class="input_player_online" type="text" id="usernameP" name="usernameP" placeholder="Online username:">
+                    <input class="input_player_online" type="text" id="usernameP" name="usernameP" i18n-placeholder placeholder="Online username:">
                     <p class="msg--error" id="msg--err"></p>
                     <div class="menu__options">
-                        <button id='playOffline' class="mainMenu__btn menu__offline_btn">Start Offline Game</button>
-                        <button id='playOnline' class="mainMenu__btn menu__online_btn">Search Online Game</button>
+                        <button id='playOffline' class="mainMenu__btn menu__offline_btn" i18n>Start Offline Game</button>
+                        <button id='playOnline' class="mainMenu__btn menu__online_btn" i18n>Search Online Game</button>
                     </div>
                     
                 </div>

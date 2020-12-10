@@ -3,6 +3,7 @@ import { app } from '../../main.js';
 import '../../css/modalMainMenu.css';
 import * as utils from '..//utils.js'
 import { modalPlayers } from './modalPlayers';
+import settings from '../../../settings';
 
 export const modalMainMenu = () => {
 
@@ -10,7 +11,11 @@ export const modalMainMenu = () => {
         //setup the video
         clearModal('bg')
         utils.setupBackgroundVideo();
-        // let siteIP = location.host;//returns the hostname and port of a URL. DOM api
+
+        if (!settings.enableOffline) {
+            localStorage.setItem('onlineUsername', alert('Insert an online username'));
+            app.online();
+        }
         
         if (localStorage.getItem('onlineUsername') != '' || localStorage.getItem('onlineUsername') != undefined){
             document.getElementById('usernameP').value = localStorage.getItem('onlineUsername');

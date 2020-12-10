@@ -1,5 +1,5 @@
 
-import {BingoCard} from '../card.js';
+import {BingoCard} from './bingoCard.js';
 
 
 describe('Generate bingo card', () => {

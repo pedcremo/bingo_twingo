@@ -6,4 +6,5 @@ const settings = {
     automatic: false,
     enableOffline: true,
 }
-module.exports = settings;
+
+export {settings};

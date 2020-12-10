@@ -7,7 +7,7 @@ const gameController = (() => {
     const secsUntilBegin = settings.secsUntilBegin;
     const maxUsers = settings.maxUsers;
     let countDown;
-    const secsLineaWait = settings.secsLineaWait;
+    const secsLineaWait = settings.secsLineaWait;    
     const speedBalls = settings.ballspeed;
     
     //Maps id -> Map object with game informations

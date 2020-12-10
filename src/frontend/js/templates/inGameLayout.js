@@ -2,8 +2,7 @@ import { clearModal, showModal } from '../core';
 import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';
-
-let settings = require('../../../settings')
+import { settings } from '../../../settings';
 
 //Render bingo bombo
 let renderBalls = () => {
@@ -54,7 +53,9 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         let divRoot = document.createElement('div');
         divRoot.classList.add('bingoCardLayout');
         divRoot.setAttribute("id",card.username);
-        document.getElementById('bingoCards').appendChild(divRoot);
+        let bingoCardsElement = document.getElementById('bingoCards');
+        bingoCardsElement.innerHTML = ""; //Clear cards
+        bingoCardsElement.appendChild(divRoot);
         //Render player card
         renderCard(extractedBalls,card.cardMatrix,card.username);
         

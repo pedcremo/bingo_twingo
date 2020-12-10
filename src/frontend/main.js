@@ -18,8 +18,7 @@ let settings = require('../settings')
  * when one player sings bingo the game stops and in addition to showing a modal with a gif, an audio jumps with a voice that sings BIINGO.
  */
 
-const app = (() => {
-    console.log(settings.ballspeed);
+const app = (() => {      
     let myApp;
     const speed = settings.ballspeed; //in miliseconds
     let bombo;
@@ -308,6 +307,5 @@ const app = (() => {
 /* Real entry point to our bingo app. Show modals to choose players and
  when closed start bingo playing (callback) */
 docReady(() => showModal(modalMainMenu()));
-
 
 export { app };

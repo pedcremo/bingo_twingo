@@ -3,7 +3,6 @@ import '../../css/ingame.css';
 import { modalLiniaBingo } from './modalLiniaBingo.js';
 import { modalMainMenu } from './modalMainMenu.js';
 import { settings } from '../../../settings';
-
 //Render bingo bombo
 let renderBalls = () => {
     document.getElementById('balls').innerHTML = `${Array.from({ length: 90 }, (_, i) => i + 1).map(ball => `<div class='bingoBallEmpty' id='${ball}'>${ball}</div>`).join("")}`;
@@ -63,7 +62,7 @@ let renderManualCard = (extractedBalls = [], cardMatrix, player) => {
 export const inGameLayout = (socketIO, card, otherPlayers) => {
 
     const controllers = () => {
-
+        let chances = 0;
         let socket = socketIO;
         let line_status = false;
         let bingo_status = false;
@@ -129,21 +128,31 @@ export const inGameLayout = (socketIO, card, otherPlayers) => {
 
         //Check bingo or linia on a card
         let checkBingo = (card, extractedBalls, line_status) => {
+            let cont=0
             let bingo = true;
             card.cardMatrix.forEach((row) => {
                 // let linia = row.filter((val) => { console.logconsole.log(document.getElementById(val+"card")); console.log("---------------------"); console.log((document.getElementById(val+"card")).className); if (!extractedBalls.includes(val) && val != null) return val }).length;
                 let linia = row.filter((val) => { if (val != null) { if ((extractedBalls.includes(val)) && ((document.getElementById(val + "card").className).includes("extracted"))) return val } }).length;
-                console.log(linia)
-                if (linia != 5) bingo = false;
-                else {
+                if (linia != 5){
+                     bingo = false;
+                     cont++;
+                }else {
                     if (line_status == false) {
                         line_status = true;
                         //Inform server we have linia   
                         socket.emit('linia', { playId: card.gameID, card: card })
-                        document.getElementById("linea/bingo").innerHTML="Bingo"
+                        document.getElementById("linea/bingo").innerHTML = "Bingo"
                     }
                 }
+
             })
+            console.log(cont)
+            if(cont>=3){
+                chances++;
+                if(chances==3){
+                    document.getElementById('linea/bingo').remove()
+                }
+            }
 
             if (bingo && bingo_status == false) {
 

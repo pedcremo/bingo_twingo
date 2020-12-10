@@ -115,9 +115,7 @@ export const modalPlayers = () => {
 
         //Back button
         let back = document.getElementById('back_button');
-        back.onclick = () =>{
-            showModal(modalMainMenu());
-        }
+        back.onclick = () => location.href = '/#/'
     }
 
     return {
@@ -138,7 +136,7 @@ export const modalPlayers = () => {
                     </div>
                     <p class="msg--error" id="msg--err"></p>
                     <div class="menu__options">
-                        <button id='playBtn' class="menu__start_btn">START GAME</button>
+                        <button id='playBtn' class="menu__start_btn" data-tr="START GAME"></button>
                     </div>
                     <div class="spinner__opts" style="margin-left:10px">
                         <span> Timer: (sec)</span>

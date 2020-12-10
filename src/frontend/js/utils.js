@@ -1,6 +1,6 @@
 import video from '../assets/videos/los_bingueros.mp4';
 import audio from '../assets/audios/Bingo Sound Effect.mp3';
-import {changeLang} from './core'
+import { changeLang } from './core'
 
 /**
 * It's a function that when any player win the bingo  there is a background audio that sings bingo!!
@@ -37,10 +37,10 @@ export function setupBackgroundVideo() {
         </div>`;
     let parser = new DOMParser();
     let videoEl = parser.parseFromString(backgroundVideo, "text/html");
-    videoEl.currentTime += Math.round(Math.random()*400);
+    videoEl.currentTime += Math.round(Math.random() * 400);
     videoEl = videoEl.body.firstChild;
     document.body.appendChild(videoEl);
-    
+
     let remove_video = document.getElementById('remove_video');
 
     //We get the video
@@ -48,12 +48,12 @@ export function setupBackgroundVideo() {
 
     //We add the atribute preload with metadata
     VideoOnly.preload = 'metadata';
-    
+
     //When loading the metadata we obtain the maximum duration of the video and we do a random math between 0 and that value
-    VideoOnly.onloadedmetadata = function() {
-        VideoOnly.currentTime = Math.round(Math.random()*VideoOnly.duration);
+    VideoOnly.onloadedmetadata = function () {
+        VideoOnly.currentTime = Math.round(Math.random() * VideoOnly.duration);
     }
-    
+
     /**
      * Mute and unmute the background video button
      */
@@ -78,23 +78,10 @@ export function setupBackgroundVideo() {
             videoDOM.style.display = "none";
         }
     }
-    setupBackgroundVideo.remove = () => document.getElementById('div_bg').remove();
+    setupBackgroundVideo.remove = () => { if (document.getElementById('div_bg')) document.getElementById('div_bg').remove() }
 }
 
-export function setupLanguage(){
-    let langOptions = `
-        <div class="lang-div">
-            <select name="Language" id="lang" class="lang-select">
-                <option value="en" id="btn-en" data-tr="English">English</option>
-                <option value="es" id="btn-es" data-tr="Spanish">Spanish</option>
-            </select>
-        </div>`;
-    let parser = new DOMParser();
-    let langEl = parser.parseFromString(langOptions, "text/html");
-    langEl = langEl.body.firstChild;
-    document.body.appendChild(langEl);
-    document.getElementById('lang').addEventListener('change', function() { changeLang(this.value) });
-}
+export let setupLanguage = () => document.getElementById('lang').addEventListener('change', function () { changeLang(this.value) });
 
 //CHECK NAME FUNCTION
 export let checkName = (name) => {

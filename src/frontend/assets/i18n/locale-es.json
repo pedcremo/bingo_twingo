@@ -4,6 +4,13 @@
         "Spanish": "Español",
         "Start Offline":"Iniciar en local",
         "Search Online Game": "Buscar partida en línea",
-        "Back":"Volver" 
+        "Back":"Volver",
+        "Home":"Inicio",
+        "Offline":"Modo Offline",
+        "About Us":"Sobre Nosotros",
+        "START GAME":"INICIAR JUEGO",
+        "Online":"Modo Online",
+        "ABOUT US":"SOBRE NOSOTROS",
+        "Time left:":"Tiempo restante:"
     }
 }

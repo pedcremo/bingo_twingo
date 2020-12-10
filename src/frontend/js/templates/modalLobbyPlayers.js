@@ -77,6 +77,7 @@ export const modalLobbyPlayers = (socketIO, card) => {
         //Event notifying game starts. It's triggered by server
         socket.on('starts_game', function (msg) {
             utils.setupBackgroundVideo.remove(); //Remove background video
+            clearModal('bg')
             clearInterval(intervalTimer);
             //Modal where we render online game: bombo, player card and others players cards            
             showModal(inGameLayout(socket, card, otherPlayers));
@@ -91,7 +92,7 @@ export const modalLobbyPlayers = (socketIO, card) => {
                 <div class="modal-content">
                     <h1>BINGO TWINGO</h1>
                     <p></p>
-                    <span class="time_left">Time left: <span id="time_count"></span></span>
+                    <span class="time_left"><span data-tr="Time left:"> </span><span id="time_count"></span></span>
                     <div class='lobby__players__list'>
                         <ol id="listLobbyPlayers"></ol>
                     </div>

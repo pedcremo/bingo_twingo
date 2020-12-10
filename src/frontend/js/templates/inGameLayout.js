@@ -141,7 +141,7 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         //Server broadcast all gamers bingo claim has been accepted
         socket.on('bingo_accepted', function (msg) {
             bingo_status = true;
-            showModal(modalLiniaBingo(msg.card.username, "bingo"), () => showModal(modalMainMenu()), false)
+            showModal(modalLiniaBingo(msg.card.username, "bingo"), () => location.href = '/#/', false)
             socket.disconnect();  
         });
 

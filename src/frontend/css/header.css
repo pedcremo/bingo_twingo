@@ -1,0 +1,39 @@
+.main-header {
+    z-index: 9999;
+    width: 100%;
+    height: 100px;
+    background-color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 50px 10px 50px;
+}
+
+.main-header__logo a{
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.main-header__options{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-header__options a{
+    margin-right: 20px;
+    color: #000000;
+    text-decoration: none;
+    font-size: 22px;
+    padding: 10px;
+}
+
+.main-header__options a:hover{
+    background-color: rgb(240, 240, 240);
+}

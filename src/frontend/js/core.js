@@ -103,7 +103,7 @@ let clearModal = (templateToClear) => {
   * @param {*} lang 
   */
 
-function changeLang(lang) {
+let changeLang = (lang) => {
     lang = lang || localStorage.getItem('app-lang') || 'en'; //Lang = al argumento introducido, al LocalStorage o por defecto ingles
     localStorage.setItem('app-lang', lang); //Guardar en LocalStorage la seleccion
     document.getElementById('lang').value = lang; //change current language in select 

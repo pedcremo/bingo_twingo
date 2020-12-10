@@ -1,4 +1,7 @@
 body {background-color: #88cefa;}
+main {
+  margin-top: 100px;
+}
 #videoBackground {
     position: fixed;
     right: 0;
@@ -225,9 +228,9 @@ table.tr {
 }
 
 .lang-div{
-  position: absolute;
-  top: 20px;
-  left: 20px;
+  /* position: absolute; */
+  /* top: 20px; */
+  /* left: 20px; */
   display: flex;
   flex-direction: column;
   z-index: 999;

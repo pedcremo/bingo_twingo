@@ -23,9 +23,9 @@ let renderCard = (extractedBalls = [], cardMatrix, player) => {
                 } else {
                     if (extractedBalls && extractedBalls.indexOf(val) >= 0) {
                         if (val === extractedBalls[extractedBalls.length - 1]) {
-                            return "<th class='extracted blink'>" + val + "</th>";
+                            return "<th  id='" + val + "card' class='extracted blink'>" + val + "</th>";
                         } else {
-                            return "<th class='extracted'>" + val + "</th>";
+                            return "<th  id='" + val + "card' class='extracted'>" + val + "</th>";
                         }
                     } else {
                         return "<th>" + val + "</th>"
@@ -40,7 +40,9 @@ let renderCard = (extractedBalls = [], cardMatrix, player) => {
 
 let renderManualCard = (extractedBalls = [], cardMatrix, player) => {
 
-    let out = `<h1>Player ${player}</h1>
+    let out = `
+    <button id='linea/bingo' class="mainMenu__btn">Linea</button>
+    <h1>Player ${player}</h1>
          <table class='bingoCard'>
             
              `+
@@ -49,7 +51,7 @@ let renderManualCard = (extractedBalls = [], cardMatrix, player) => {
                 if (val == null) {
                     return "<th class='nulo'></th>"
                 } else {
-                    return "<th  id='"+val+"card' class='none'>" + val + "</th>"
+                    return "<th  id='" + val + "card' class='none'>" + val + "</th>"
                 }
             }).join("")
             + "</tr>"
@@ -107,15 +109,13 @@ export const inGameLayout = (socketIO, card, otherPlayers) => {
                 //Render player card to reflect any change maybe msg.num is in the card and we need to mark it
                 renderCard(extractedBalls, card.cardMatrix, card.username);
             }
-            console.log(otherPlayers);
 
             //Render others players cards too 
             otherPlayers.forEach((otherPlayer) =>
                 renderCard(extractedBalls, otherPlayer.card, otherPlayer.username)
             );
             //Check if player card is in 'linia' or bingo state
-            if(settings.typeOnline == "auto"){checkBingo(card, extractedBalls, line_status);}
-
+            if (settings.typeOnline == "auto") { checkBingo(card, extractedBalls, line_status); }
 
 
             if (lastBall) {
@@ -131,13 +131,16 @@ export const inGameLayout = (socketIO, card, otherPlayers) => {
         let checkBingo = (card, extractedBalls, line_status) => {
             let bingo = true;
             card.cardMatrix.forEach((row) => {
-                let linia = row.filter((val) => { if (!extractedBalls.includes(val) && val != null) return val }).length;
-                if (linia > 0) bingo = false;
+                // let linia = row.filter((val) => { console.logconsole.log(document.getElementById(val+"card")); console.log("---------------------"); console.log((document.getElementById(val+"card")).className); if (!extractedBalls.includes(val) && val != null) return val }).length;
+                let linia = row.filter((val) => { if (val != null) { if ((extractedBalls.includes(val)) && ((document.getElementById(val + "card").className).includes("extracted"))) return val } }).length;
+                console.log(linia)
+                if (linia != 5) bingo = false;
                 else {
                     if (line_status == false) {
                         line_status = true;
                         //Inform server we have linia   
                         socket.emit('linia', { playId: card.gameID, card: card })
+                        document.getElementById("linea/bingo").innerHTML="Bingo"
                     }
                 }
             })
@@ -184,11 +187,19 @@ export const inGameLayout = (socketIO, card, otherPlayers) => {
                 elements[i].addEventListener('click', function () {
 
                     this.className = this.className.includes("extracted") ? "none" : "none extracted"
-                    checkBingo(card, extractedBalls, line_status);
+                    // checkBingo(card, extractedBalls, line_status);
 
                 })
             }
+
+
+            let LineaBingo = document.getElementById('linea/bingo');
+            LineaBingo.onclick = () => {
+                checkBingo(card, extractedBalls, line_status)
+            }
         }
+
+
     }
 
     return {

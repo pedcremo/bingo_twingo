@@ -84,9 +84,7 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
             );
             //Check if player card is in 'linia' or bingo state
             checkBingo(card,extractedBalls,line_status);   
-            if(lastBall){
-                document.getElementById(lastBall).className = 'bingoBall';
-            }
+            if (lastBall) document.getElementById(lastBall).className = 'bingoBall';
             //a la bola actual le ponemos la animacion
             document.getElementById(msg.num).className = 'bingoBall blink'
 
@@ -95,7 +93,6 @@ export const inGameLayout = (socketIO, card,otherPlayers) => {
         
         //Check bingo or linia on a card
         let checkBingo = (card, extractedBalls,line_status) => {
-            console.log(extractedBalls.length);
             let bingo = true;
             card.cardMatrix.forEach((row) => {
                 let linia = row.filter((val) => { if (!extractedBalls.includes(val) && val != null) return val }).length;

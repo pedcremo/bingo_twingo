@@ -76,8 +76,6 @@ const gameController = (() => {
                     clearInterval(bomboInterval);
                 })
                 
-                //currentGame.set('bomboTimer',bomboInterval);
-                //realGame = new Map(currentGame);
                 pubSub.publish("starts_game",JSON.stringify({id:currentGame.get('id'),players:currentGame.get('listPlayers'),countDown:currentGame.get('countDown')})); 
                 gamesOnFire.set(currentGame.get('id'),new Map(currentGame))
                 //RESET currentGame

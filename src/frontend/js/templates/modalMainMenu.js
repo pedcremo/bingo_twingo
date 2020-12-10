@@ -12,18 +12,17 @@ export const modalMainMenu = () => {
         //setup the video
         clearModal('bg')
         utils.setupBackgroundVideo();
+        let username = document.getElementById('usernameP');
         let siteIP = location.host;//returns the hostname and port of a URL. DOM api
         
-        if (localStorage.getItem('onlineUsername') != '' || localStorage.getItem('onlineUsername') != undefined){
-            document.getElementById('usernameP').value = localStorage.getItem('onlineUsername');
-        }
+        if (localStorage.getItem('onlineUsername')) username.value = localStorage.getItem('onlineUsername');
        
         document.getElementById('playOnline').onclick = function () {
-            if(utils.checkName(document.getElementById('usernameP').value)){
-                localStorage.setItem('onlineUsername',document.getElementById('usernameP').value)
+            if(utils.checkName(username.value)){
+                localStorage.setItem('onlineUsername', username.value)
                 const socket = io('ws://'+siteIP, {transports: ['websocket']});
                 socket.on('connect', () => {
-                    socket.emit('join', document.getElementById('usernameP').value);                
+                    socket.emit('join', username.value);                
                 });
     
                 /* Event triggered once a user joins an 
@@ -31,13 +30,10 @@ export const modalMainMenu = () => {
                 * should not be shared
                 */
                 socket.on('joined_game', function (msg) {           
-                    let card = JSON.parse(msg)
                     //Online game            
-                    showModal(modalLobbyPlayers(socket,card))
+                    showModal(modalLobbyPlayers(socket, JSON.parse(msg)))
                 }); 
-            }else{
-                document.getElementById('msg--err').innerHTML = "\u26A0  Name not allowed!"
-            }
+            }else document.getElementById('msg--err').innerHTML = "\u26A0  Name not allowed!"
         }
 
         // Offline Game

@@ -1,7 +1,7 @@
 import video from '../../assets/videos/los_bingueros.mp4';
 import audio from '../../assets/audios/Bingo Sound Effect.mp3';
 import { app } from '../../main.js';
-import { debug, clearModal, showModal } from '../core';
+import { clearModal, showModal } from '../core';
 import '../../css/modalPlayers.css';
 import * as utils from '../utils.js'
 import { settings } from '../../../settings';
@@ -28,9 +28,9 @@ function setupBackgroundVideo() {
 
 
 /**
-* It's a function that when any player win the bingo  there is a background audio that sings bingo!!
-* This function I'll  imported it into index and called it in  pubSub.subscribe("BINGO")
-*/
+ * It's a function that when any player win the bingo  there is a background audio that sings bingo!!
+ * This function I'll  imported it into index and called it in  pubSub.subscribe("BINGO")
+ */
 export function setupAudioBingoWin() {
     let audioBackground = `
         <div id="sound">
@@ -73,19 +73,19 @@ export const modalPlayers = () => {
                 })
                 uList.appendChild(li);
             });
-            document.getElementById('remainingPlayersSpan').innerHTML = "Players: "+playersNames.length + "/50 "; // At the moment the max players are static
+            document.getElementById('remainingPlayersSpan').innerHTML = "Players: " + playersNames.length + "/50 "; // At the moment the max players are static
         }
 
         /*
-        * First add the current players in localstorage. Then, if you hit the
-        * add player button you can add more. You can also delete them
-        * by clicking in their names
-        */
+         * First add the current players in localstorage. Then, if you hit the
+         * add player button you can add more. You can also delete them
+         * by clicking in their names
+         */
         let addButton = document.getElementById('addplayer');
 
         renderPlayerList();
 
-        addButton.onclick = function () {
+        addButton.onclick = function() {
             let playerName = document.getElementById("fname").value;
             if (playerName) { //If input name is empty
                 if (!playersNames.includes(playerName)) { //If name is repeated
@@ -103,32 +103,32 @@ export const modalPlayers = () => {
         }
 
 
-        
+
         /**
          * Add player on press enter key
          */
-        document.getElementById("fname").addEventListener("keyup", function (event) { //Add player pressing enter in input
+        document.getElementById("fname").addEventListener("keyup", function(event) { //Add player pressing enter in input
             if (event.keyCode === 13) {
                 event.preventDefault();
                 document.getElementById("addplayer").click();
             }
         });
-      
+
         /**
          * Here you have the set interval  time options
          */
         let inputVal = document.querySelector('#spinner__value');
         //set default from settings
-        inputVal.value= settings.ballspeed;
+        inputVal.value = settings.ballspeed;
         let btnUp = document.querySelector('#spinner__up');
         let btnDown = document.querySelector('#spinner__down');
 
-        btnUp.onclick = function () {
+        btnUp.onclick = function() {
             let value = parseFloat(inputVal.value);
             if (value < 5.0) inputVal.value = (value + parseFloat(0.1)).toFixed(1);
         };
 
-        btnDown.onclick = function () {
+        btnDown.onclick = function() {
             let value = parseFloat(inputVal.value);
             if (value > 0.1) inputVal.value = (value - parseFloat(0.1)).toFixed(1);
         };
@@ -137,17 +137,17 @@ export const modalPlayers = () => {
             if (event.target.value <= 0) event.target.value = 0.1;
             if (event.target.value > 5) event.target.value = 5;
         });
-       
-     
+
+
         let remove_video = document.getElementById('remove_video');
         let div_bg = document.getElementById('div_bg');
 
         /**
          * On click play Button, game starts.
          */
-        
+
         let playBtn = document.getElementById('playBtn');
-        playBtn.onclick = function () {
+        playBtn.onclick = function() {
             if (playersNames.length !== 0 && playersNames != undefined) { //Check there are players added to the game
                 let m = document.getElementById('playersForm');
                 m.style.display = "none";
@@ -163,10 +163,10 @@ export const modalPlayers = () => {
         /**
          * Mute and unmute the background video button
          */
-        
+
         let unmuteBtn = document.getElementById('unmuteBtn');
         let videoEl = document.getElementById('videoBackground');
-        unmuteBtn.onclick = function () {
+        unmuteBtn.onclick = function() {
             videoEl.muted = !videoEl.muted;
             this.className = (videoEl.muted == true) ? "fas fa-volume-mute btn--mute off--red" : "fas fa-volume-off btn--mute"
         }
@@ -174,8 +174,8 @@ export const modalPlayers = () => {
         /**
          * Remove / show video background
          */
-        
-        remove_video.onclick = function () {
+
+        remove_video.onclick = function() {
             if (this.classList.contains('off--red')) {
                 this.className = "fas fa-video-slash btn--removebg"
                 videoEl.style.display = "block";
@@ -185,66 +185,15 @@ export const modalPlayers = () => {
             }
         }
 
-
-        /**
-        * Export Players in csv.
-        */
-
-        let exportBtn = document.getElementById('export');
-        exportBtn.addEventListener('click', function() {    
-            let players = JSON.parse(localStorage.getItem("playersNames")).map(e => e);
-            if (players.length != 0) {
-                let csvContent = "data:text/csv;charset=utf-8," 
-                + players;
-                let encodedUri = encodeURI(csvContent);
-                var link = document.createElement("a");
-                link.setAttribute("href", encodedUri);
-                link.setAttribute("download", "players.csv");
-                document.body.appendChild(link);
-
-                link.click();
-            } else {
-                document.getElementById('msg--err').innerHTML = "\u26A0  Add a user before exporting"
-            }
-        });
-
-        /**
-        * Import PLayers in LocalStorage
-        */
-
-        let importBtn = document.getElementById('import');
-        importBtn.addEventListener('click', function() {    
-            let link = document.getElementById('import-file');             
-            link.click();
-        });
-
-        let input_file = document.getElementById('import-file');
-        input_file.addEventListener('change', function (event) {
-            var files = event.target.files;
-            if (files[0].type == "text/csv") {
-                let reader = new FileReader;
-                reader.readAsText(files[0]);
-                reader.onload = function(e) {
-                    localStorage.setItem("playersNames",JSON.stringify(reader.result.split(',')));
-                    renderPlayerList();
-                    input_file.value = "";
-                };
-                document.getElementById('msg--err').innerHTML = "";
-            } else {
-                document.getElementById('msg--err').innerHTML = "\u26A0  The file isn't valid"
-            }
-          }, false);
-
         //rback button
         let back = document.getElementById('back_button');
-        back.onclick = () =>{
+        back.onclick = () => {
             showModal(modalMainMenu());
         }
     }
 
     return {
-        template:
-            `
+        template: `
             <div id="playersForm" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content">
@@ -271,12 +220,6 @@ export const modalPlayers = () => {
                         </div>    
                     </div>
                     <span class="remainingPlayers" id="remainingPlayersSpan"></span>
-                </div>
-                <div class="modal-content-export">
-                    <h3>Game settings</h3>
-                    <button id="export" class="button">Export Players</button>
-                    <button id="import" class="button">Import Players</button>
-                    <input type="file" id="import-file" style="display:none"/>
                 </div>
             </div>`,
         controllers: controllers

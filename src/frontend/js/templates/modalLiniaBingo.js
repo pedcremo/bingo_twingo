@@ -12,29 +12,30 @@ import bingo3 from '../../assets/images/bingo3.gif'
 /**
  * Here we put the different line and bingo gifs in an arrangement
  */
-var imgsBingo=new Array();
-imgsBingo.push(bingo1,bingo2,bingo3);
+var imgsBingo = new Array();
+imgsBingo.push(bingo1, bingo2, bingo3);
 
-var imgsLinea=new Array();
-imgsLinea.push(linea1,linea2,linea3);
+var imgsLinea = new Array();
+imgsLinea.push(linea1, linea2, linea3);
 
 /**
  * These functions return a random gif from which we have imported
  */
-function randomBingo(){
-    let img=imgsBingo[Math.round(Math.random() * ((imgsBingo.length-1) - 0) + 0  )];
-    return img;
-}
-function randomLinea(){
-    let img=imgsLinea[Math.round(Math.random() * ((imgsLinea.length-1) - 0) + 0  )];
+function randomBingo() {
+    let img = imgsBingo[Math.round(Math.random() * ((imgsBingo.length - 1) - 0) + 0)];
     return img;
 }
 
-export const modalLiniaBingo= (player,type) => {
-    let img=null;
+function randomLinea() {
+    let img = imgsLinea[Math.round(Math.random() * ((imgsLinea.length - 1) - 0) + 0)];
+    return img;
+}
 
-    if(type=="bingo") img=randomBingo();
-    if(type=="linea") img=randomLinea();
+export const modalLiniaBingo = (player, type) => {
+    let img = null;
+
+    if (type == "bingo") img = randomBingo();
+    if (type == "linea") img = randomLinea();
 
     return `
     <div id="liniaForm" class="modal">
@@ -46,4 +47,4 @@ export const modalLiniaBingo= (player,type) => {
             </div>  
         </div>
     `
-} 
+}

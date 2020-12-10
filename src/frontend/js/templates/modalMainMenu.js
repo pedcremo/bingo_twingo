@@ -1,4 +1,4 @@
-import { debug, clearModal, showModal } from '../core';
+import { clearModal, showModal } from '../core';
 import { app } from '../../main.js';
 import '../../css/modalMainMenu.css';
 import * as utils from '..//utils.js'
@@ -12,43 +12,42 @@ export const modalMainMenu = () => {
         //setup the video
         clearModal('bg')
         utils.setupBackgroundVideo();
-        let siteIP = location.host;//returns the hostname and port of a URL. DOM api
-        
-        if (localStorage.getItem('onlineUsername') != '' || localStorage.getItem('onlineUsername') != undefined){
+        let siteIP = location.host; //returns the hostname and port of a URL. DOM api
+
+        if (localStorage.getItem('onlineUsername') != '' || localStorage.getItem('onlineUsername') != undefined) {
             document.getElementById('usernameP').value = localStorage.getItem('onlineUsername');
         }
-       
-        document.getElementById('playOnline').onclick = function () {
-            if(utils.checkName(document.getElementById('usernameP').value)){
-                localStorage.setItem('onlineUsername',document.getElementById('usernameP').value)
-                const socket = io('ws://'+siteIP, {transports: ['websocket']});
+
+        document.getElementById('playOnline').onclick = function() {
+            if (utils.checkName(document.getElementById('usernameP').value)) {
+                localStorage.setItem('onlineUsername', document.getElementById('usernameP').value)
+                const socket = io('ws://' + siteIP, { transports: ['websocket'] });
                 socket.on('connect', () => {
-                    socket.emit('join', document.getElementById('usernameP').value);                
+                    socket.emit('join', document.getElementById('usernameP').value);
                 });
-    
+
                 /* Event triggered once a user joins an 
-                * online game and get a ramdom card with unique id that 
-                * should not be shared
-                */
-                socket.on('joined_game', function (msg) {           
+                 * online game and get a ramdom card with unique id that 
+                 * should not be shared
+                 */
+                socket.on('joined_game', function(msg) {
                     let card = JSON.parse(msg)
-                    //Online game            
-                    showModal(modalLobbyPlayers(socket,card))
-                }); 
-            }else{
+                        //Online game            
+                    showModal(modalLobbyPlayers(socket, card))
+                });
+            } else {
                 document.getElementById('msg--err').innerHTML = "\u26A0  Name not allowed!"
             }
         }
 
         // Offline Game
-        document.getElementById('playOffline').onclick = function () {
+        document.getElementById('playOffline').onclick = function() {
             showModal(modalPlayers(), app.start)
         }
     }
 
     return {
-        template:
-            `
+        template: `
             <div id="mainMenu" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content">

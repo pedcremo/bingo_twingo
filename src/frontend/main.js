@@ -1,11 +1,10 @@
-
 import './css/style.css';
 import './css/ingame.css';
 import { docReady, showModal, clearModal, debug } from './js/core.js';
 import { Bombo } from '../common/bombo.js';
 import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
-import { modalPlayers, setupAudioBingoWin } from './js/templates/modalPlayers.js';
+import { setupAudioBingoWin } from './js/templates/modalPlayers.js';
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
 import { settings } from '../settings';
@@ -17,7 +16,7 @@ import { settings } from '../settings';
  * when one player sings bingo the game stops and in addition to showing a modal with a gif, an audio jumps with a voice that sings BIINGO.
  */
 
-const app = (() => {      
+const app = (() => {
     let myApp;
     const speed = settings.ballspeed; //in miliseconds
     let bombo;
@@ -34,7 +33,7 @@ const app = (() => {
         if (num) {
             pubSub.publish("New Number", bombo.getExtractedNumbers());
 
-        /* otherwise means bombo is running out of balls and we should finish the game */    
+            /* otherwise means bombo is running out of balls and we should finish the game */
         } else {
             stop();
         }
@@ -47,13 +46,13 @@ const app = (() => {
         clearInterval(myApp);
     }
     let resume = () => {
-        stateApp = "run";
-        myApp = setInterval(getBallFromBombo, app.speed);
-    }
-    /* Start bingo play */
+            stateApp = "run";
+            myApp = setInterval(getBallFromBombo, app.speed);
+        }
+        /* Start bingo play */
     let start = () => {
         clearModal('bg');
-        
+
         /* Basic template where we are going to render bingo play */
         let doc = new DOMParser().parseFromString(`
             <div id="gameLayout" class="gameLayout">
@@ -78,41 +77,41 @@ const app = (() => {
         pubSub = new PubSub();
         /* Create and render empty bombo for our playing */
         bombo = new Bombo(document.getElementById('balls'));
-        
+
 
         /* Change app state from stop to run  */
         stateApp = "run";
         let pauseBtn = document.getElementById('pauseOfflineBtn');
         let blackPanel = document.getElementById('blackPanel')
-        pauseBtn.onclick = function() {                       
-            if (stateApp == "stop") {
-                blackPanel.style.display = "none"
-                pauseBtn.innerHTML = '<i class="fas fa-pause"></i>'
-                resume();
-            }else {
-                blackPanel.style.display = "unset"
-                pauseBtn.innerHTML = '<i class="fas fa-play"></i>'
-                stop();
+        pauseBtn.onclick = function() {
+                if (stateApp == "stop") {
+                    blackPanel.style.display = "none"
+                    pauseBtn.innerHTML = '<i class="fas fa-pause"></i>'
+                    resume();
+                } else {
+                    blackPanel.style.display = "unset"
+                    pauseBtn.innerHTML = '<i class="fas fa-play"></i>'
+                    stop();
+                }
             }
-        }
-        /* Subscribe app to LINIA event. When this occurs
-        we show up a modal with the player awarded and a gif animation 
-        obviously we stop bingo playing until modal is closed 
-        */        
+            /* Subscribe app to LINIA event. When this occurs
+            we show up a modal with the player awarded and a gif animation 
+            obviously we stop bingo playing until modal is closed 
+            */
         pubSub.subscribe("LINIA", (player) => {
-            debug("Linia");            
+            debug("Linia");
             /* Stop bingo playing */
             stop();
             /* As linia only could be awarded once per playing we delete that event
             from publish/subscriber mechanism */
             pubSub.unsubscribe("LINIA");
             /* Show modal */
-            setTimeout(function () {
-                showModal(modalLiniaBingo(player, "linea"), function () {
+            setTimeout(function() {
+                showModal(modalLiniaBingo(player, "linea"), function() {
                     debug("SPEEEED");
                     debug(speed);
                     myApp = setInterval(getBallFromBombo, app.speed);
-                },false)
+                }, false)
             }, 50);
 
 
@@ -126,12 +125,12 @@ const app = (() => {
             /* call audio song to enhance bingo prize experience*/
             setupAudioBingoWin();
             /* Show bingo modal with animation and player awarded */
-            setTimeout(function () {
+            setTimeout(function() {
                 /* Delete BINGO event from publish/subscriber mechanism */
                 pubSub.unsubscribe("BINGO");
                 // clearModal("bingoCard") BUG
-                showModal(modalLiniaBingo(player, "bingo"), function () {
-                    document.getElementById('sound').remove();//remove div audio sound
+                showModal(modalLiniaBingo(player, "bingo"), function() {
+                    document.getElementById('sound').remove(); //remove div audio sound
                     showModal(modalMainMenu());
                 })
             }, 50);
@@ -143,7 +142,7 @@ const app = (() => {
         let playersNames = JSON.parse(localStorage.getItem('playersNames'));
         /* Clear html layer reserved for render bingo cards */
         document.getElementById('bingoCards').innerHTML = ""
-        /* Create one bingo card for every bingo player */
+            /* Create one bingo card for every bingo player */
         playersNames.forEach(name => {
             players.push(new BingoCard(name, document.getElementById('bingoCards'), pubSub));
         });
@@ -156,10 +155,9 @@ const app = (() => {
 
     /* Return start and stop function and play speed */
     return {
-        start: start
-        ,
+        start: start,
         toggle: () => {
-            (stateApp == "run") ? stop() : start();
+            (stateApp == "run") ? stop(): start();
         },
         speed: speed
     };
@@ -167,6 +165,6 @@ const app = (() => {
 })();
 /* Real entry point to our bingo app. Show modals to choose players and
  when closed start bingo playing (callback) */
- docReady(() => showModal(modalMainMenu()));
+docReady(() => showModal(modalMainMenu()));
 
 export { app };

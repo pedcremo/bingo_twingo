@@ -2,9 +2,9 @@ import video from '../assets/videos/los_bingueros.mp4';
 import audio from '../assets/audios/Bingo Sound Effect.mp3';
 
 /**
-* It's a function that when any player win the bingo  there is a background audio that sings bingo!!
-* This function I'll  imported it into index and called it in  pubSub.subscribe("BINGO")
-*/
+ * It's a function that when any player win the bingo  there is a background audio that sings bingo!!
+ * This function I'll  imported it into index and called it in  pubSub.subscribe("BINGO")
+ */
 export function setupAudioBingoWin() {
     let audioBackground = `
         <div id="sound">
@@ -36,10 +36,10 @@ export function setupBackgroundVideo() {
         </div>`;
     let parser = new DOMParser();
     let videoEl = parser.parseFromString(backgroundVideo, "text/html");
-    videoEl.currentTime += Math.round(Math.random()*400);
+    videoEl.currentTime += Math.round(Math.random() * 400);
     videoEl = videoEl.body.firstChild;
     document.body.appendChild(videoEl);
-    
+
 
     let remove_video = document.getElementById('remove_video');
 
@@ -48,19 +48,19 @@ export function setupBackgroundVideo() {
 
     //We add the atribute preload with metadata
     VideoOnly.preload = 'metadata';
-    
+
     //When loading the metadata we obtain the maximum duration of the video and we do a random math between 0 and that value
     VideoOnly.onloadedmetadata = function() {
-        VideoOnly.currentTime = Math.round(Math.random()*VideoOnly.duration);
+        VideoOnly.currentTime = Math.round(Math.random() * VideoOnly.duration);
     }
-    
+
     /**
      * Mute and unmute the background video button
      */
 
     let unmuteBtn = document.getElementById('unmuteBtn');
     let videoDOM = document.getElementById('videoBackground');
-    unmuteBtn.onclick = function () {
+    unmuteBtn.onclick = function() {
         videoDOM.muted = !videoDOM.muted;
         this.className = (videoDOM.muted == true) ? "fas fa-volume-mute btn--mute off--red" : "fas fa-volume-off btn--mute"
     }
@@ -69,7 +69,7 @@ export function setupBackgroundVideo() {
      * Remove / show video background
      */
 
-    remove_video.onclick = function () {
+    remove_video.onclick = function() {
         if (this.classList.contains('off--red')) {
             this.className = "fas fa-video-slash btn--removebg"
             videoDOM.style.display = "block";

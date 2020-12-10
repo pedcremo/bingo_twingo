@@ -1,0 +1,12 @@
+version: '3'
+services:
+  bingo:
+    image: node:10.15
+    container_name: bingo_twingo
+    working_dir: /app
+    volumes:
+    - ./:/app
+    restart: on-failure
+    ports:
+    - "8080:8080"
+    command: bash -c "npm i && npm start"

@@ -3,7 +3,7 @@ const settings = {
     secsUntilBegin: 15, //Online applied
     maxUsers: 10, //Online applied
     secsLineaWait: 5, //Online applied
-    offlineDemo: true //Set offline demo mode true or false
+    offlineDemo: false //Set offline demo mode true or false
 }
 
 export { settings };

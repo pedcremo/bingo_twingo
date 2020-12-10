@@ -3,6 +3,7 @@ const settings = {
     secsUntilBegin :3,
     maxUsers :10,
     secsLineaWait: 3.5,
-    automatic: false
+    automatic: false,
+    enableOffline: true,
 }
 module.exports = settings;

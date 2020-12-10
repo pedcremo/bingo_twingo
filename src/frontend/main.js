@@ -2,7 +2,6 @@
 import './css/style.css';
 import './css/ingame.css';
 import { docReady, showModal, clearModal, debug } from './js/core.js';
-//import './js/card.js';
 import { Bombo } from '../common/bombo.js';
 import { BingoCard } from '../common/bingoCard.js';
 import { PubSub } from '../common/pubSub.js';
@@ -10,7 +9,6 @@ import { modalPlayers, setupAudioBingoWin } from './js/templates/modalPlayers.js
 import { modalLiniaBingo } from './js/templates/modalLiniaBingo.js';
 import { modalMainMenu } from './js/templates/modalMainMenu.js';
 import io from 'socket.io-client';
-// import  * as settings  from '../utils/settings';
 let settings = require('../settings')
 
 /**

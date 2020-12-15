@@ -7,6 +7,8 @@
         "Back":"Volver",
         "Start Game":"Empezar",
         "Time left":"Tiempo Restante",
-        "Chat Messages":"Información de la partida"
+        "Chat Messages":"Información de la partida",
+        "Start Manual Game":"Empezar modo manual",
+        "Start Interactive Game":"Empezar modo interactivo"
     }
 } 

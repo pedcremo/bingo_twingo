@@ -1,0 +1,22 @@
+name: Bingo_Workflow
+on:
+  push:
+    branches:
+      - githubActions_improvement
+jobs:
+  syntax_check_job:
+    name: Syntax check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Linter Execution
+        uses: github/super-linter@v3
+        env:
+          DEFAULT_BRANCH: githubActions_improvement
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LINTER_RULES_PATH: /
+          JAVASCRIPT_ES_CONFIG_FILE: .eslintrc.js
+          VALIDATE_JAVASCRIPT_ES: true
+    outputs:
+      status: ${{ job.status }}

@@ -2,7 +2,7 @@ name: Bingo_Workflow
 on:
   push:
     branches:
-      - githubActions_improvement
+      - githubActions_improvementD
 jobs:
   syntax_check_job:
     name: Syntax check
